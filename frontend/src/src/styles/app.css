@@ -1,0 +1,91 @@
+/* ===== Layout ===== */
+.app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.appHeader {
+  border-bottom: 1px solid #e5e7eb;
+  background: #fff;
+}
+
+.appHeaderInner,
+.appMainInner,
+.appFooterInner {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 16px;
+}
+
+.appTitle {
+  margin: 0;
+  font-size: 20px;
+}
+
+.appMain {
+  flex: 1;
+  background: #fafafa;
+}
+
+.appFooter {
+  border-top: 1px solid #e5e7eb;
+  background: #fff;
+}
+
+.muted {
+  color: #6b7280;
+}
+
+/* ===== Flash ===== */
+.flashArea {
+  margin-bottom: 12px;
+  display: grid;
+  gap: 8px;
+}
+
+.flashOk,
+.flashErr {
+  margin: 0;
+  padding: 10px 12px;
+  border-radius: 10px;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.flashOk {
+  background: #ecfdf5;
+  border: 1px solid #a7f3d0;
+  color: #065f46;
+}
+
+.flashErr {
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #991b1b;
+}
+
+/* ===== Utility ===== */
+.row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.mt8 {
+  margin-top: 8px;
+}
+
+.mt12 {
+  margin-top: 12px;
+}
+
+.mt24 {
+  margin-top: 24px;
+}
+
+.small {
+  font-size: 13px;
+  color: #374151;
+}
