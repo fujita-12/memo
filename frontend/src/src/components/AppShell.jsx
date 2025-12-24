@@ -1,12 +1,6 @@
 export default function AppShell({ info, error, children }) {
   return (
     <div className="app">
-      <header className="appHeader">
-        <div className="appHeaderInner">
-          <h1 className="appTitle">Memo App</h1>
-        </div>
-      </header>
-
       <main className="appMain">
         <div className="appMainInner">
           {(info || error) && (

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { getUser } from './api/client';
 import AppRoutes from './router/AppRoutes.jsx';
+import Header from './components/Header.jsx';
 
 export default function App() {
   const [user, setUser] = useState(null);
@@ -24,5 +25,10 @@ export default function App() {
 
   if (booting) return <div style={{ padding: 20 }}>Loading...</div>;
 
-  return <AppRoutes user={user} onUserUpdated={onUserUpdated} onLoggedOut={onLoggedOut} />;
+  return (
+    <>
+      <Header user={user} onLoggedOut={onLoggedOut} />
+      <AppRoutes user={user} onUserUpdated={onUserUpdated} onLoggedOut={onLoggedOut} />
+    </>
+  );
 }
