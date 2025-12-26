@@ -24,7 +24,7 @@ class EmailChangeRequestedNotification extends Notification
 
     public function toMail(object $notifiable): MailMessage
     {
-        $frontend = rtrim(env('FRONTEND_URL', 'http://localhost:5173'), '/');
+        $frontend = rtrim(config('app.frontend_url'), '/');
 
         // router 版
         $approveUrl = $frontend . '/email/approve?token=' . urlencode($this->approveToken);

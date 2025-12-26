@@ -12,14 +12,18 @@ export function setFlashEmail(email) {
   sessionStorage.setItem(KEY_EMAIL, String(email));
 }
 
-export function consumeFlashInfo() {
-  const v = sessionStorage.getItem(KEY_INFO);
-  if (v) sessionStorage.removeItem(KEY_INFO);
-  return v || '';
+export function consumeFlashInfo(delayMs = 500) {
+  const v = sessionStorage.getItem(KEY_INFO) || '';
+  if (v) {
+    window.setTimeout(() => sessionStorage.removeItem(KEY_INFO), delayMs);
+  }
+  return v;
 }
 
-export function consumeFlashEmail() {
-  const v = sessionStorage.getItem(KEY_EMAIL);
-  if (v) sessionStorage.removeItem(KEY_EMAIL);
-  return v || '';
+export function consumeFlashEmail(delayMs = 500) {
+  const v = sessionStorage.getItem(KEY_EMAIL) || '';
+  if (v) {
+    window.setTimeout(() => sessionStorage.removeItem(KEY_EMAIL), delayMs);
+  }
+  return v;
 }

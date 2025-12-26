@@ -9,7 +9,7 @@ Route::get('/', function () {
 
 // 未ログインで verify を踏んだ時の逃げ先（GET /login が必要）
 Route::get('/login', function () {
-    return redirect(env('FRONTEND_URL', 'http://localhost:5173'));
+    return redirect(rtrim(config('app.frontend_url'), '/') . '/login');
 })->name('login');
 
 // メールのリンク（web）

@@ -6,7 +6,7 @@ import App from './App.jsx'
 import './styles/global.css';
 import './styles/app.css';
 
-const basename = import.meta.env.BASE_URL.replace(/\/$/, ''); // '/memo/' → '/memo'
+const basename = import.meta.env.BASE_URL;
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>

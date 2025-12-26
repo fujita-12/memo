@@ -6,7 +6,6 @@ import Section from '../components/Section.jsx';
 import TextField from '../components/TextField.jsx';
 import Button from '../components/Button.jsx';
 
-import { pickLaravelErrors } from '../utils/pickLaravelErrors.js';
 import { resendVerification, getUser } from '../api/client';
 
 import { useFlash } from '../hooks/useFlash.js';
@@ -33,7 +32,7 @@ export default function VerifyNoticePage({ user, onLoggedOut, onUserUpdated }) {
     onDeleted: () => {
       setFlashInfo('退会しました。ご利用ありがとうございました。');
       onLoggedOut?.();
-      window.location.replace('/auth');
+      window.location.replace(import.meta.env.BASE_URL + 'auth');
     },
   });
 
@@ -57,7 +56,7 @@ export default function VerifyNoticePage({ user, onLoggedOut, onUserUpdated }) {
       const u = await refreshUser();
       if (u?.email_verified_at) {
         setFlashInfo('メール認証が完了しました。');
-        window.location.replace('/auth');
+        window.location.replace(import.meta.env.BASE_URL + 'auth');
       } else {
         flash.info = 'まだ未認証です。メールのリンクを開いてください。';
       }
