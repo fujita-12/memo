@@ -37,11 +37,11 @@ export default function LoginPage({ onLoggedIn }) {
 
     // ② state が無い/空なら sessionStorage から拾う（退会/ログアウト等の確実ルート）
     if (!stateInfo) {
-      const v = consumeFlashInfo();
+      const v = consumeFlashInfo(500);
       if (v) setInfo(v);
     }
     if (!stateEmail) {
-      const e = consumeFlashEmail();
+      const e = consumeFlashEmail(500);
       if (e) setEmail(e);
     }
   }, [location.state]);

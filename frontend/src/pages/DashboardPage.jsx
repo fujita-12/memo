@@ -41,8 +41,9 @@ export default function DashboardPage({ user, onUserUpdated, onLoggedOut }) {
     onDeleted: () => {
       setFlashInfo('退会しました。ご利用ありがとうございました。');
       onLoggedOut?.();
-      // ✅ /auth に寄せる（AuthPageが/loginへ送ってくれる）
-      window.location.replace('/auth'); // ルータでもOKだが、セッション絡みで強制リロードしたいならこれもアリ
+
+      const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+      window.location.replace(`${base}/auth`);
     },
   });
 

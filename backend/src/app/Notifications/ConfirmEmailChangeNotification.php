@@ -23,7 +23,7 @@ class ConfirmEmailChangeNotification extends Notification
 
     public function toMail(object $notifiable): MailMessage
     {
-        $frontend = rtrim(env('FRONTEND_URL', 'http://localhost:5173'), '/');
+        $frontend = rtrim(config('app.frontend_url'), '/');
 
         $url = $frontend . '/email/confirm'
             . '?token=' . urlencode($this->token)

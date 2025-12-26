@@ -4,7 +4,8 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import AppShell from '../components/AppShell.jsx';
 import Button from '../components/Button.jsx';
 import { pickLaravelErrors } from '../utils/pickLaravelErrors.js';
-import { cancelEmailChange } from '../api/client';
+import { cancelEmailChange, logout } from '../api/client';
+import { setFlashInfo } from '../utils/sessionFlash.js';
 
 export default function EmailCancelPage() {
   const [params] = useSearchParams();
@@ -15,9 +16,6 @@ export default function EmailCancelPage() {
   const [loading, setLoading] = useState(false);
   const [info, setInfo] = useState('');
   const [error, setError] = useState('');
-
-  // ✅ 処理済みフラグ（tokenを消しても「tokenが無いエラー」を出さないため）
-  const [done, setDone] = useState(false);
 
   const resetMessages = () => {
     setInfo('');
@@ -32,23 +30,23 @@ export default function EmailCancelPage() {
     try {
       const res = await cancelEmailChange({ token });
 
+      let msg = '拒否しました（メールアドレス変更はキャンセルされました）';
       if (res.status === 'canceled') {
-        setInfo('拒否しました（メールアドレス変更はキャンセルされました）');
+        msg = '拒否しました（メールアドレス変更はキャンセルされました）';
       } else if (res.status === 'already_completed') {
         const s = res.completion_status;
-        if (s === 'confirmed') setInfo('すでに確定済みです。');
-        else if (s === 'canceled') setInfo('すでに拒否済みです。');
-        else if (s === 'expired') setInfo('期限切れです。');
-        else setInfo('すでに処理済みです。');
+        if (s === 'confirmed') msg = 'すでに確定済みです。';
+        else if (s === 'canceled') msg = 'すでに拒否済みです。';
+        else if (s === 'expired') msg = '期限切れです。';
+        else msg = 'すでに処理済みです。';
       } else {
-        setInfo('リンクが無効、または処理済みです。');
+        msg = 'リンクが無効、または処理済みです。';
       }
 
-      // ✅ 「処理済み」扱いにして token無しエラー表示を止める
-      setDone(true);
+      await logout().catch(() => {});
 
-      // ✅ tokenをURLから消してページに残す
-      navigate('/email/cancel', { replace: true });
+      setFlashInfo(msg);
+      navigate('/auth', { replace: true });
     } catch (e) {
       const { message } = pickLaravelErrors(e);
       setError(message || '拒否に失敗しました');
@@ -58,7 +56,7 @@ export default function EmailCancelPage() {
   };
 
   // ✅ token無しエラーは「未処理の時だけ」表示
-  const showTokenMissing = !token && !done && !info && !error;
+  const showTokenMissing = !token && !info && !error;
 
   return (
     <AppShell info={info} error={error}>
@@ -86,7 +84,7 @@ export default function EmailCancelPage() {
           )}
 
           {/* 処理後は、戻るボタンだけ出す（好みで） */}
-          {!token && (info || error || done) && (
+          {!token && (info || error) && (
             <div className="row mt12">
               <Button onClick={() => navigate('/login', { replace: true })} disabled={loading}>
                 Loginへ戻る
