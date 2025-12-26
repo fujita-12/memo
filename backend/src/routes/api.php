@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\NotebookController;
 use App\Http\Controllers\Api\NoteController;
 use App\Http\Controllers\Api\PasswordController;
 use App\Http\Controllers\Api\AccountController;
+use App\Http\Controllers\Auth\VerifyEmailController;
 
 Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
     return $request->user();
@@ -35,3 +36,7 @@ Route::middleware(['auth:sanctum', 'verified.api'])->group(function () {
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::delete('/account', [AccountController::class, 'destroy']);
 });
+
+Route::get('/email/verify/{id}/{hash}', VerifyEmailController::class)
+  ->middleware(['auth:sanctum', 'signed'])
+  ->name('verification.verify_api');

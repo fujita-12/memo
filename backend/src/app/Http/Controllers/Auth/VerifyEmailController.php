@@ -11,11 +11,12 @@ class VerifyEmailController extends Controller
     {
         $request->fulfill();
 
+        if ($request->wantsJson()) {
+            return response()->json(['verified' => true]);
+        }
+
         $frontend = rtrim(config('app.frontend_url'), '/');
 
-        // 認証後はフロント（/memo）に戻す
         return redirect()->to($frontend . '/?verified=1');
-        // もしログイン画面に戻したいならこっちでもOK:
-        // return redirect()->to($frontend . '/login?verified=1');
     }
 }

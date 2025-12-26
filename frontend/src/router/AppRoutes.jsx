@@ -15,6 +15,8 @@ import EmailApprovePage from '../pages/EmailApprovePage.jsx';
 import EmailCancelPage from '../pages/EmailCancelPage.jsx';
 import EmailConfirmPage from '../pages/EmailConfirmPage.jsx';
 
+import VerifyEmailPage from '../pages/VerifyEmailPage.jsx';
+
 function RequireAuth({ user }) {
   if (!user) return <Navigate to="/auth" replace />;
   return <Outlet />;
@@ -47,6 +49,8 @@ export default function AppRoutes({ user, onUserUpdated, onLoggedOut }) {
       <Route path="/email/approve" element={<EmailApprovePage />} />
       <Route path="/email/cancel" element={<EmailCancelPage />} />
       <Route path="/email/confirm" element={<EmailConfirmPage onUserUpdated={onUserUpdated} />} />
+
+      <Route path="/verify-email" element={<VerifyEmailPage onUserUpdated={onUserUpdated} />} />
 
       {/* auth only */}
       <Route element={<RequireAuth user={user} />}>

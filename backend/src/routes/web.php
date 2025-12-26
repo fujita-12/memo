@@ -12,7 +12,7 @@ Route::get('/login', function () {
     return redirect(rtrim(config('app.frontend_url'), '/') . '/login');
 })->name('login');
 
-// メールのリンク（web）
-Route::get('/verify-email/{id}/{hash}', VerifyEmailController::class)
-    ->middleware(['auth', 'signed', 'throttle:6,1'])
-    ->name('verification.verify');
+// メールのリンク（web）旧互換
+// Route::get('/verify-email/{id}/{hash}', VerifyEmailController::class)
+//     ->middleware(['auth', 'signed', 'throttle:6,1'])
+//     ->name('verification.verify');

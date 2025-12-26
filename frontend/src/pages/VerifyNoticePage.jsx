@@ -41,7 +41,7 @@ export default function VerifyNoticePage({ user, onLoggedOut, onUserUpdated }) {
     setLoadingResend(true);
     try {
       await resendVerification();
-      flash.info = '認証メールを再送しました。Mailpit（http://localhost:8025）を確認してください。';
+      flash.info = '認証メールを再送しました。受信メールを確認してください。';
     } catch (e) {
       flash.fail(e, '再送に失敗しました');
     } finally {
