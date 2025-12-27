@@ -1,0 +1,146 @@
+name: Deploy (STG develop / PROD main)
+
+on:
+  push:
+    branches:
+      - develop
+      - main
+
+concurrency:
+  group: deploy-${{ github.ref_name }}
+  cancel-in-progress: true
+
+jobs:
+  build_frontend:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install deps
+        run: npm ci
+
+      - name: Build (dist)
+        run: npm run build
+
+      - name: Upload dist artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontend-dist
+          path: frontend/dist
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: [build_frontend]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download dist artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: frontend-dist
+          path: frontend/dist
+
+      - name: Set deploy target (paths & API base)
+        id: target
+        shell: bash
+        run: |
+          if [ "${{ github.ref_name }}" = "develop" ]; then
+            echo "front_path=${{ secrets.STG_FRONT_PATH }}" >> "$GITHUB_OUTPUT"
+            echo "back_path=${{ secrets.STG_BACK_PATH }}" >> "$GITHUB_OUTPUT"
+            echo "api_base=https://stg-api-memo.studyone.work" >> "$GITHUB_OUTPUT"
+          else
+            echo "front_path=${{ secrets.PROD_FRONT_PATH }}" >> "$GITHUB_OUTPUT"
+            echo "back_path=${{ secrets.PROD_BACK_PATH }}" >> "$GITHUB_OUTPUT"
+            echo "api_base=https://api-memo.studyone.work" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Prepare SSH
+        shell: bash
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan -p "${{ secrets.SSH_PORT }}" "${{ secrets.SSH_HOST }}" >> ~/.ssh/known_hosts
+
+      # ===== Frontend deploy =====
+      - name: Ensure frontend dir exists (remote)
+        shell: bash
+        run: |
+          ssh -p "${{ secrets.SSH_PORT }}" "${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}" \
+            "mkdir -p '${{ steps.target.outputs.front_path }}'"
+
+      - name: Install rsync
+        run: sudo apt-get update && sudo apt-get install -y rsync
+
+      - name: Rsync frontend dist
+        shell: bash
+        run: |
+          rsync -az --delete \
+            -e "ssh -p ${{ secrets.SSH_PORT }}" \
+            frontend/dist/ \
+            "${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${{ steps.target.outputs.front_path }}/"
+
+      # IMPORTANT: overwrite config.js AFTER rsync (dist upload will reset it)
+      - name: Write runtime config.js (API_BASE_URL)
+        shell: bash
+        run: |
+          ssh -p "${{ secrets.SSH_PORT }}" "${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}" <<'REMOTE'
+          set -e
+          cat > "${{ steps.target.outputs.front_path }}/config.js" <<'EOF'
+          window.__APP_CONFIG__ = {
+            API_BASE_URL: "${{ steps.target.outputs.api_base }}",
+          };
+          EOF
+          REMOTE
+
+      # ===== Backend deploy =====
+      - name: Ensure backend dir exists (remote)
+        shell: bash
+        run: |
+          ssh -p "${{ secrets.SSH_PORT }}" "${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}" \
+            "mkdir -p '${{ steps.target.outputs.back_path }}'"
+
+      - name: Rsync backend (safe excludes)
+        shell: bash
+        run: |
+          rsync -az --delete \
+            --exclude ".env" \
+            --exclude "storage/**" \
+            --exclude "vendor/**" \
+            --exclude "bootstrap/cache/**" \
+            -e "ssh -p ${{ secrets.SSH_PORT }}" \
+            backend/src/ \
+            "${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${{ steps.target.outputs.back_path }}/"
+
+      - name: Composer + Artisan (remote)
+        shell: bash
+        run: |
+          ssh -p "${{ secrets.SSH_PORT }}" "${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}" <<'REMOTE'
+          set -e
+          cd "${{ steps.target.outputs.back_path }}"
+
+          PHP84=/usr/bin/php8.4
+          COMPOSER_BIN="$(command -v composer)"
+
+          echo "PHP84: $($PHP84 -v | head -n 1)"
+          echo "Composer bin: $COMPOSER_BIN"
+
+          rm -rf vendor
+
+          $PHP84 "$COMPOSER_BIN" install --no-dev --optimize-autoloader --no-interaction --prefer-dist
+
+          $PHP84 artisan config:clear
+          $PHP84 artisan cache:clear
+          $PHP84 artisan route:clear
+          $PHP84 artisan migrate --force
+          REMOTE
+
