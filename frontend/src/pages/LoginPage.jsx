@@ -72,7 +72,7 @@ export default function LoginPage({ onLoggedIn }) {
 
   return (
     <AppShell info={info} error={error}>
-      <h2>Loginデプロイ更新テスト</h2>
+      <h2>Login</h2>
 
       <TextField placeholder="email" value={email} onChange={setEmail} readOnly={loading} />
       {fieldErrors.email && <p className="flashErr">{fieldErrors.email[0]}</p>}
