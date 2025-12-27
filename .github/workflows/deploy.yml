@@ -102,6 +102,28 @@ jobs:
           EOF
           REMOTE
 
+      - name: Write SPA .htaccess (frontend)
+        shell: bash
+        run: |
+          ssh -p "${{ secrets.SSH_PORT }}" "${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}" <<REMOTE
+          set -e
+          cat > "${{ steps.target.outputs.front_path }}/.htaccess" <<'EOF'
+          RewriteEngine On
+          RewriteBase /memo/
+          RewriteCond %{REQUEST_FILENAME} !-f
+          RewriteCond %{REQUEST_FILENAME} !-d
+          RewriteRule ^ index.html [QSA,L]
+
+          <IfModule mod_headers.c>
+            <FilesMatch "^(index\.html|config\.js)$">
+              Header set Cache-Control "no-store, no-cache, must-revalidate, max-age=0"
+              Header set Pragma "no-cache"
+              Header set Expires "0"
+            </FilesMatch>
+          </IfModule>
+          EOF
+          REMOTE
+
       # ===== Backend deploy =====
       - name: Ensure backend dir exists (remote)
         shell: bash
