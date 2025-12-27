@@ -54,13 +54,13 @@ jobs:
         shell: bash
         run: |
           if [ "${{ github.ref_name }}" = "develop" ]; then
-            echo "front_path=${{ secrets.STG_FRONT_PATH }}" >> $GITHUB_OUTPUT
-            echo "back_path=${{ secrets.STG_BACK_PATH }}" >> $GITHUB_OUTPUT
-            echo "api_base=https://stg-api-memo.studyone.work" >> $GITHUB_OUTPUT
+            echo "front_path=${{ secrets.STG_FRONT_PATH }}" >> "$GITHUB_OUTPUT"
+            echo "back_path=${{ secrets.STG_BACK_PATH }}" >> "$GITHUB_OUTPUT"
+            echo "api_base=https://stg-api-memo.studyone.work" >> "$GITHUB_OUTPUT"
           else
-            echo "front_path=${{ secrets.PROD_FRONT_PATH }}" >> $GITHUB_OUTPUT
-            echo "back_path=${{ secrets.PROD_BACK_PATH }}" >> $GITHUB_OUTPUT
-            echo "api_base=https://api-memo.studyone.work" >> $GITHUB_OUTPUT
+            echo "front_path=${{ secrets.PROD_FRONT_PATH }}" >> "$GITHUB_OUTPUT"
+            echo "back_path=${{ secrets.PROD_BACK_PATH }}" >> "$GITHUB_OUTPUT"
+            echo "api_base=https://api-memo.studyone.work" >> "$GITHUB_OUTPUT"
           fi
 
       - name: Prepare SSH
@@ -93,14 +93,14 @@ jobs:
       - name: Write runtime config.js (API_BASE_URL)
         shell: bash
         run: |
-          ssh -p "${{ secrets.SSH_PORT }}" "${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}" <<SSH
+          ssh -p "${{ secrets.SSH_PORT }}" "${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}" <<'REMOTE'
           set -e
           cat > "${{ steps.target.outputs.front_path }}/config.js" <<'EOF'
-window.__APP_CONFIG__ = {
-  API_BASE_URL: "${{ steps.target.outputs.api_base }}",
-};
-EOF
-SSH
+          window.__APP_CONFIG__ = {
+            API_BASE_URL: "${{ steps.target.outputs.api_base }}",
+          };
+          EOF
+          REMOTE
 
       # ===== Backend deploy =====
       - name: Ensure backend dir exists (remote)
@@ -124,7 +124,7 @@ SSH
       - name: Composer + Artisan (remote)
         shell: bash
         run: |
-          ssh -p "${{ secrets.SSH_PORT }}" "${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}" <<'SSH'
+          ssh -p "${{ secrets.SSH_PORT }}" "${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}" <<'REMOTE'
           set -e
           cd "${{ steps.target.outputs.back_path }}"
 
@@ -139,4 +139,4 @@ SSH
           php artisan cache:clear
           php artisan route:clear
           php artisan migrate --force
-SSH
+          REMOTE
