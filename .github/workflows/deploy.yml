@@ -128,13 +128,19 @@ jobs:
           set -e
           cd "${{ steps.target.outputs.back_path }}"
 
-          echo "PHP: $(php -v | head -n 1)"
-          echo "Composer: $(composer -V)"
+          PHP84=/usr/bin/php8.4
+          COMPOSER_BIN="$(command -v composer)"
 
-          /usr/bin/php8.4 $(command -v composer) install --no-dev --optimize-autoloader
+          echo "PHP84: $($PHP84 -v | head -n 1)"
+          echo "Composer bin: $COMPOSER_BIN"
 
-          php artisan config:clear
-          php artisan cache:clear
-          php artisan route:clear
-          php artisan migrate --force
+          rm -rf vendor
+
+          $PHP84 "$COMPOSER_BIN" install --no-dev --optimize-autoloader --no-interaction --prefer-dist
+
+          $PHP84 artisan config:clear
+          $PHP84 artisan cache:clear
+          $PHP84 artisan route:clear
+          $PHP84 artisan migrate --force
           REMOTE
+
