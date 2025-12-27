@@ -126,17 +126,25 @@ jobs:
         run: |
           ssh -p "${{ secrets.SSH_PORT }}" "${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}" <<'REMOTE'
           set -e
+          echo "=== whoami / pwd ==="
+          whoami
+          pwd
+
+          echo "=== back_path from workflow ==="
+          echo "${{ steps.target.outputs.back_path }}"
+
+          echo "=== ls back_path ==="
+          ls -la "${{ steps.target.outputs.back_path }}" || true
+
+          echo "=== cd back_path and ls ==="
           cd "${{ steps.target.outputs.back_path }}"
+          pwd
+          ls -la
 
-          if ! command -v composer >/dev/null 2>&1; then
-            echo "Composer not found on server. Install composer or adjust workflow to upload vendor."
-            exit 1
-          fi
+          echo "=== find composer.json ==="
+          find . -maxdepth 3 -name composer.json -print || true
 
-          composer install --no-dev --optimize-autoloader
-
-          php artisan config:clear
-          php artisan cache:clear
-          php artisan route:clear
-          php artisan migrate --force
+          echo "=== test composer.json ==="
+          test -f composer.json
           REMOTE
+
