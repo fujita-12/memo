@@ -128,10 +128,10 @@ jobs:
           set -e
           cd "${{ steps.target.outputs.back_path }}"
 
-          # composer.json がないと事故るのでガード
-          test -f composer.json
+          echo "PHP: $(php -v | head -n 1)"
+          echo "Composer: $(composer -V)"
 
-          composer install --no-dev --optimize-autoloader
+          /usr/bin/php8.4 $(command -v composer) install --no-dev --optimize-autoloader
 
           php artisan config:clear
           php artisan cache:clear
