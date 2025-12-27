@@ -118,7 +118,7 @@ jobs:
             --exclude "vendor/**" \
             --exclude "bootstrap/cache/**" \
             -e "ssh -p ${{ secrets.SSH_PORT }}" \
-            backend/ \
+            backend/src/ \
             "${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${{ steps.target.outputs.back_path }}/"
 
       - name: Composer + Artisan (remote)
