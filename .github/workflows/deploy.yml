@@ -1,4 +1,4 @@
-name: Deploy (STG: develop / PROD: main)
+name: Deploy (STG develop / PROD main)
 
 on:
   push:
