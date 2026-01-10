@@ -80,18 +80,14 @@ export default function LoginPage({ onLoggedIn }) {
       <div className="mt8" />
       <TextField placeholder="password" type="password" value={password} onChange={setPassword} readOnly={loading} />
       {fieldErrors.password && <p className="flashErr">{fieldErrors.password[0]}</p>}
-
+      <p className="password-text" onClick={() => navigate('/forgot')} disabled={loading}>パスワードを忘れた方はこちら</p>
       <div className="mt12 row">
         <Button onClick={handleLogin} disabled={loading}>
           {loading ? '...' : 'Login'}
         </Button>
 
-        <Button onClick={() => navigate('/forgot')} disabled={loading}>
-          パスワードを忘れた
-        </Button>
-
         <Button onClick={() => navigate('/register')} disabled={loading}>
-          Registerへ
+          新規登録
         </Button>
       </div>
     </AppShell>
