@@ -89,3 +89,14 @@
   font-size: 13px;
   color: #374151;
 }
+.password-text {
+  text-align: right;
+  font-size: 0.8rem;
+  margin: 5px 0 10px;
+  transition: .3s;
+  cursor: pointer;
+  max-width: 520px;
+}
+.password-text:hover {
+  color: #991b1b;
+}
