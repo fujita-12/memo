@@ -17,9 +17,23 @@ class PasswordItemController extends Controller
         }
 
         return $list->items()
-            ->with(['latestEntry:id,password_item_id,title,body,created_at'])
-            ->latest()
-            ->get(['id','password_list_id','title','created_at','updated_at']);
+            ->with(['latestEntry' => function ($q) {
+                $q->select([
+                    'password_entries.id',
+                    'password_entries.password_item_id',
+                    'password_entries.title',
+                    'password_entries.body',
+                    'password_entries.created_at',
+                ]);
+            }])
+            ->latest('password_items.created_at')
+            ->get([
+                'password_items.id',
+                'password_items.password_list_id',
+                'password_items.title',
+                'password_items.created_at',
+                'password_items.updated_at',
+            ]);
     }
 
     public function store(Request $request, PasswordList $list)
