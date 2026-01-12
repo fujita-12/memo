@@ -10,6 +10,15 @@ import ResetPage from '../pages/ResetPage.jsx';
 
 import VerifyNoticePage from '../pages/VerifyNoticePage.jsx';
 import DashboardPage from '../pages/DashboardPage.jsx';
+import SettingsIndexPage from '../pages/settings/SettingsIndexPage.jsx';
+import SettingsEmailPage from '../pages/settings/SettingsEmailPage.jsx';
+import SettingsPasswordPage from '../pages/settings/SettingsPasswordPage.jsx';
+import SettingsDeletePage from '../pages/settings/SettingsDeletePage.jsx';
+
+import PasswordListsPage from '../pages/PasswordListsPage.jsx';
+import PasswordListCreatePage from '../pages/PasswordListCreatePage.jsx';
+import PasswordItemsPage from '../pages/PasswordItemsPage.jsx';
+import PasswordItemPage from '../pages/PasswordItemPage.jsx';
 
 import EmailApprovePage from '../pages/EmailApprovePage.jsx';
 import EmailCancelPage from '../pages/EmailCancelPage.jsx';
@@ -65,6 +74,32 @@ export default function AppRoutes({ user, onUserUpdated, onLoggedOut }) {
         <Route
           path="/dashboard"
           element={<DashboardPage user={user} onUserUpdated={onUserUpdated} onLoggedOut={onLoggedOut} />}
+        />
+
+        {/* Password */}
+        <Route path="/password-lists" element={<PasswordListsPage />} />
+        <Route path="/password-lists/create" element={<PasswordListCreatePage />} />
+        <Route path="/password-lists/:listId" element={<PasswordItemsPage />} />
+        <Route path="/password-lists/:listId/items/:itemId" element={<PasswordItemPage />} />
+
+        {/* Notebook(後で) */}
+        {/* <Route path="/notebooks" element={<NotebooksPage />} /> */}
+
+        <Route
+          path="/settings"
+          element={<SettingsIndexPage user={user} />}
+        />
+        <Route
+          path="/settings/email"
+          element={<SettingsEmailPage user={user} onUserUpdated={onUserUpdated} />}
+        />
+        <Route
+          path="/settings/password"
+          element={<SettingsPasswordPage user={user} />}
+        />
+        <Route
+          path="/settings/delete"
+          element={<SettingsDeletePage user={user} onLoggedOut={onLoggedOut} />}
         />
       </Route>
 

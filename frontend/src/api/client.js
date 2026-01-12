@@ -126,3 +126,50 @@ export async function approveEmailChange(data) {
   const res = await api.post('/api/email/change-approve', data); // { token }
   return res.data;
 }
+
+// PasswordList
+export async function listPasswordLists() {
+  const { data } = await api.get('/api/password-lists');
+  return data;
+}
+export async function createPasswordList(title) {
+  const { data } = await api.post('/api/password-lists', { title });
+  return data;
+}
+export async function deletePasswordList(id) {
+  await api.delete(`/api/password-lists/${id}`);
+}
+
+// Password items
+export async function listPasswordItems(listId) {
+  const { data } = await api.get(`/api/password-lists/${listId}/items`);
+  return data;
+}
+export async function createPasswordItem(listId, payload) {
+  const { data } = await api.post(`/api/password-lists/${listId}/items`, payload);
+  return data;
+}
+export async function getPasswordItem(itemId) {
+  const { data } = await api.get(`/api/password-items/${itemId}`);
+  return data; // { secret } を含む
+}
+export async function updatePasswordItem(itemId, payload) {
+  const { data } = await api.patch(`/api/password-items/${itemId}`, payload);
+  return data;
+}
+export async function deletePasswordItem(itemId) {
+  await api.delete(`/api/password-items/${itemId}`);
+}
+
+// password entries
+export async function listPasswordEntries(itemId) {
+  const { data } = await api.get(`/api/password-items/${itemId}/entries`);
+  return data;
+}
+export async function createPasswordEntry(itemId, payload) {
+  const { data } = await api.post(`/api/password-items/${itemId}/entries`, payload);
+  return data;
+}
+export async function deletePasswordEntry(entryId) {
+  await api.delete(`/api/password-entries/${entryId}`);
+}

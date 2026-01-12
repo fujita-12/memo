@@ -54,9 +54,16 @@ export default function Header({ user, onLoggedOut }) {
                 <div role="menu" className={styles.dropdown}>
                   <div className={styles.dropdownHeader}>
                     <div className={styles.dropdownLabel}>Signed in as</div>
-                    <div className={styles.dropdownEmail}>{user.email}</div>
+                    <div className={styles.dropdownEmail}>{user.email}</div>          
                   </div>
-
+                  <Link
+                    to="/settings"
+                    role="menuitem"
+                    onClick={() => setOpen(false)}
+                    className={styles.menuButton}
+                  >
+                    アカウント設定
+                  </Link>
                   <button
                     type="button"
                     onClick={async () => {

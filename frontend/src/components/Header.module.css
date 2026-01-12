@@ -76,11 +76,14 @@
 .menuButton {
   width: 100%;
   text-align: left;
-  padding: 12px;
+  padding: 6px 12px;
   background: #fff;
   border: 0;
   cursor: pointer;
   font-size: 14px;
+  text-decoration: none;
+  color: #111;
+  display: block;
 }
 
 .menuButtonDisabled {
