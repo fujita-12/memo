@@ -9,6 +9,16 @@ import Modal from '../components/Modal.jsx';
 import { useFlash } from '../hooks/useFlash.js';
 import { usePasswordItems } from '../hooks/usePasswordItems.js';
 
+function toOneLine(s) {
+  return String(s ?? '').replace(/\s+/g, ' ').trim();
+}
+
+function clipText(s, n = 48) {
+  const t = toOneLine(s);
+  if (t.length <= n) return t;
+  return t.slice(0, n) + '…';
+}
+
 export default function PasswordItemsPage() {
   const { listId } = useParams();
   const flash = useFlash();
@@ -20,7 +30,7 @@ export default function PasswordItemsPage() {
         {pw.loadingList && <p className="small">Loading...</p>}
 
         {pw.items.map((it) => {
-          const preview = it.latest_entry?.body ?? '';
+          const previews = it.preview_entries ?? [];
 
           return (
             <div key={it.id} className="listRow" style={{ display: 'block' }}>
@@ -43,8 +53,73 @@ export default function PasswordItemsPage() {
                 </button>
               </div>
 
+              {/* ✅ 3行プレビュー（古い順） */}
               <div className="pwPreview">
-                {preview ? preview : <span className="muted">（まだ詳細がありません）</span>}
+                {previews.length === 0 ? (
+                  <span className="muted">（まだ詳細がありません）</span>
+                ) : (
+                  <div style={{ display: 'grid', gap: 8 }}>
+                    {previews.map((e) => (
+                      <div
+                        key={e.id}
+                        className="pwPreviewRow"
+                        style={{
+                          display: 'grid',
+                          gridTemplateColumns: '120px 1fr 34px',
+                          gap: 10,
+                          alignItems: 'center',
+                        }}
+                      >
+                        {/* label */}
+                        <div className="muted" style={{ fontSize: 12 }}>
+                          {clipText(e.title, 18)}
+                        </div>
+
+                        {/* value */}
+                        <div
+                          title="クリックでコピー"
+                          role="button"
+                          tabIndex={0}
+                          onClick={() => pw.copyBody(e.body)}
+                          onKeyDown={(ev) => {
+                            if (ev.key === 'Enter' || ev.key === ' ') pw.copyBody(e.body);
+                          }}
+                          style={{
+                            fontSize: 13,
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis',
+                            whiteSpace: 'nowrap',
+                            cursor: 'pointer',
+                            padding: '6px 8px',
+                            borderRadius: 10,
+                            border: '1px solid #e5e7eb',
+                            background: '#fff',
+                          }}
+                        >
+                          {clipText(e.body, 60)}
+                        </div>
+
+                        {/* copy icon */}
+                        <button
+                          type="button"
+                          className="pwCopyBtn"
+                          onClick={() => pw.copyBody(e.body)}
+                          title="コピー"
+                          style={{
+                            width: 34,
+                            height: 34,
+                            borderRadius: 10,
+                            border: '1px solid #e5e7eb',
+                            background: '#fff',
+                            cursor: 'pointer',
+                          }}
+                        >
+                          📋
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
             </div>
           );

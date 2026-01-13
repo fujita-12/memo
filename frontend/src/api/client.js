@@ -33,17 +33,54 @@ export async function getUser() {
   }
 }
 
+// // ノートブック
+// export async function listNotebooks() {
+//   const { data } = await api.get('/api/notebooks');
+//   return data;
+// }
+
+// export async function createNotebook(title) {
+//   const { data } = await api.post('/api/notebooks', { title });
+//   return data;
+// }
+
+// export async function deleteNotebook(id) {
+//   await api.delete(`/api/notebooks/${id}`);
+// }
+
+// // ノート
+// export async function listNotes(notebookId) {
+//   const { data } = await api.get(`/api/notebooks/${notebookId}/notes`);
+//   return data;
+// }
+
+// export async function createNote(notebookId, payload) {
+//   const { data } = await api.post(`/api/notebooks/${notebookId}/notes`, payload);
+//   return data;
+// }
+
+// export async function updateNote(noteId, payload) {
+//   const { data } = await api.patch(`/api/notes/${noteId}`, payload);
+//   return data;
+// }
+
+// export async function deleteNote(noteId) {
+//   await api.delete(`/api/notes/${noteId}`);
+// }
+
 // ノートブック
 export async function listNotebooks() {
   const { data } = await api.get('/api/notebooks');
   return data;
 }
-
+export async function getNotebook(notebookId) {
+  const { data } = await api.get(`/api/notebooks/${notebookId}`);
+  return data;
+}
 export async function createNotebook(title) {
   const { data } = await api.post('/api/notebooks', { title });
   return data;
 }
-
 export async function deleteNotebook(id) {
   await api.delete(`/api/notebooks/${id}`);
 }
@@ -53,17 +90,18 @@ export async function listNotes(notebookId) {
   const { data } = await api.get(`/api/notebooks/${notebookId}/notes`);
   return data;
 }
-
+export async function getNote(noteId) {
+  const { data } = await api.get(`/api/notes/${noteId}`);
+  return data;
+}
 export async function createNote(notebookId, payload) {
   const { data } = await api.post(`/api/notebooks/${notebookId}/notes`, payload);
   return data;
 }
-
 export async function updateNote(noteId, payload) {
   const { data } = await api.patch(`/api/notes/${noteId}`, payload);
   return data;
 }
-
 export async function deleteNote(noteId) {
   await api.delete(`/api/notes/${noteId}`);
 }

@@ -15,6 +15,11 @@ import SettingsEmailPage from '../pages/settings/SettingsEmailPage.jsx';
 import SettingsPasswordPage from '../pages/settings/SettingsPasswordPage.jsx';
 import SettingsDeletePage from '../pages/settings/SettingsDeletePage.jsx';
 
+import NotebooksPage from '../pages/NotebooksPage.jsx';
+import NotebookCreatePage from '../pages/NotebookCreatePage.jsx';
+import NotesPage from '../pages/NotesPage.jsx';
+import NotePage from '../pages/NotePage.jsx';
+
 import PasswordListsPage from '../pages/PasswordListsPage.jsx';
 import PasswordListCreatePage from '../pages/PasswordListCreatePage.jsx';
 import PasswordItemsPage from '../pages/PasswordItemsPage.jsx';
@@ -82,8 +87,11 @@ export default function AppRoutes({ user, onUserUpdated, onLoggedOut }) {
         <Route path="/password-lists/:listId" element={<PasswordItemsPage />} />
         <Route path="/password-lists/:listId/items/:itemId" element={<PasswordItemPage />} />
 
-        {/* Notebook(後で) */}
-        {/* <Route path="/notebooks" element={<NotebooksPage />} /> */}
+        {/* Notebook */}
+        <Route path="/notebooks" element={<NotebooksPage />} />
+        <Route path="/notebooks/create" element={<NotebookCreatePage />} />
+        <Route path="/notebooks/:notebookId" element={<NotesPage />} />
+        <Route path="/notebooks/:notebookId/notes/:noteId" element={<NotePage />} />
 
         <Route
           path="/settings"

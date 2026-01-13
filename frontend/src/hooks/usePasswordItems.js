@@ -4,6 +4,7 @@ import {
   createPasswordItem,
   deletePasswordItem,
 } from '../api/client';
+import { copyToClipboard } from '../utils/clipboard';
 
 export function usePasswordItems({ flash, listId }) {
   const [items, setItems] = useState([]);
@@ -54,10 +55,7 @@ export function usePasswordItems({ flash, listId }) {
 
     try {
       const created = await createPasswordItem(listId, { title });
-
-      // created には latest_entry は付かないので、ここでは空のままOK
       setItems((p) => [created, ...p]);
-
       setAddOpen(false);
     } catch (e) {
       const errs = flash.fail(e, '追加に失敗しました');
@@ -82,6 +80,22 @@ export function usePasswordItems({ flash, listId }) {
     }
   };
 
+  // ✅ 一覧の「各行」コピー：bodyだけコピー
+  const copyBody = async (body) => {
+    flash.reset();
+    const text = body ?? '';
+    if (!text) {
+      flash.info = 'コピーする内容がありません';
+      return;
+    }
+    try {
+      const ok = await copyToClipboard(text);
+      flash.info = ok ? 'コピーしました' : 'コピーできませんでした';
+    } catch (e) {
+      flash.fail(e, 'コピーに失敗しました');
+    }
+  };
+
   return {
     items,
     loadingList,
@@ -99,5 +113,7 @@ export function usePasswordItems({ flash, listId }) {
 
     deletingId,
     deleteAction,
+
+    copyBody,
   };
 }
