@@ -55,11 +55,11 @@ export default function EmailCancelPage() {
     }
   };
 
-  // ✅ token無しエラーは「未処理の時だけ」表示
+  //  token無しエラーは「未処理の時だけ」表示
   const showTokenMissing = !token && !info && !error;
 
   return (
-    <AppShell info={info} error={error}>
+    <AppShell info={info} error={error} showTabs={false}>
       <h2>メールアドレス変更の拒否（旧メール）</h2>
 
       {showTokenMissing ? (

@@ -65,7 +65,7 @@ export default function EmailApprovePage() {
   const showTokenMissing = !token && !done && !info && !error;
 
   return (
-    <AppShell info={info} error={error}>
+    <AppShell info={info} error={error} showTabs={false}>
       <h2>メールアドレス変更の承認（旧メール）</h2>
 
       {showTokenMissing ? (

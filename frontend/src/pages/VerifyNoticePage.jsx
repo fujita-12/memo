@@ -70,7 +70,7 @@ export default function VerifyNoticePage({ user, onLoggedOut, onUserUpdated }) {
   const disabledAny = loadingResend || loadingRefresh || loadingLogout || del.loadingDelete;
 
   return (
-    <AppShell info={flash.info} error={flash.error}>
+    <AppShell info={flash.info} error={flash.error} showTabs={false}>
       <p>ログイン中: {user.email}</p>
 
       <Section title="メール認証が未完了です">

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+// import { useNavigate } from 'react-router-dom';
 
 import AppShell from '../components/AppShell.jsx';
 import TextField from '../components/TextField.jsx';
@@ -8,7 +8,7 @@ import { pickLaravelErrors } from '../utils/pickLaravelErrors.js';
 import { forgotPassword } from '../api/client';
 
 export default function ForgotPage() {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   const [email, setEmail] = useState('');
 
@@ -39,22 +39,32 @@ export default function ForgotPage() {
   };
 
   return (
-    <AppShell info={info} error={error}>
-      <h2>Forgot Password</h2>
-
-      <p className="small">登録したメールアドレスを入力すると、再設定リンクを送ります。</p>
-
-      <TextField placeholder="email" value={email} onChange={setEmail} readOnly={loading} />
-      {fieldErrors.email && <p className="flashErr">{fieldErrors.email[0]}</p>}
-
-      <div className="mt12 row">
-        <Button onClick={handleForgot} disabled={loading}>
-          {loading ? '...' : '送信'}
-        </Button>
-
-        <Button onClick={() => navigate('/login')} disabled={loading}>
-          Loginへ戻る
-        </Button>
+    <AppShell info={info} error={error} showTabs={false}>
+      <div className="default-box-bg">
+        <h2>パスワード再設定</h2>
+        <p className="small">登録したメールアドレスを入力すると、再設定リンクを送ります。</p>
+        <table className="main-table">
+          <tbody>
+            <tr>
+              <th>メールアドレス</th>
+              <td>
+                <TextField placeholder="メールアドレスを入力してください" value={email} onChange={setEmail} readOnly={loading} />
+                {fieldErrors.email && <p className="flashErr">{fieldErrors.email[0]}</p>}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div className="mt36">
+          <Button onClick={handleForgot} disabled={loading} variant="primary" size="md" align="center">
+            {loading ? '...' : '送信'}
+          </Button>
+        </div>
+        <hr />
+        <div>
+          <Button to="/login" disabled={loading} variant="black" size="md" align="center">
+            ログインへ戻る
+          </Button>
+        </div>
       </div>
     </AppShell>
   );

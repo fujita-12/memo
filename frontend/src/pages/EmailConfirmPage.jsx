@@ -89,7 +89,7 @@ export default function EmailConfirmPage() {
   };
 
   return (
-    <AppShell info={info} error={error}>
+    <AppShell info={info} error={error} showTabs={false}>
       <h2>メールアドレス変更の確定（新メール）</h2>
 
       {!token ? (

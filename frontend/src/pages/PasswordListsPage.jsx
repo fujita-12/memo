@@ -1,23 +1,18 @@
 import AppShell from '../components/AppShell.jsx';
 import Section from '../components/Section.jsx';
 import Button from '../components/Button.jsx';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useFlash } from '../hooks/useFlash.js';
 import { usePasswordVault } from '../hooks/usePasswordVault.js';
 
 export default function PasswordListsPage() {
   const flash = useFlash();
+  const nav = useNavigate();
   const pv = usePasswordVault({ flash });
 
   return (
     <AppShell info={flash.info} error={flash.error}>
       <Section title="PasswordList 一覧">
-        <div className="row">
-          <Link to="/password-lists/create">
-            <Button>＋ PasswordList作成</Button>
-          </Link>
-        </div>
-
         <div className="mt16" />
 
         {pv.lists.map((l) => (
@@ -40,6 +35,10 @@ export default function PasswordListsPage() {
             </button>
           </div>
         ))}
+
+        <div style={{ position: 'fixed', right: 24, bottom: 100 }}>
+          <Button onClick={() => nav('/password-lists/create')}>＋</Button>
+        </div>
       </Section>
     </AppShell>
   );

@@ -60,7 +60,7 @@ export default function NotesPage() {
           );
         })}
 
-        <div style={{ position: 'fixed', right: 24, bottom: 24 }}>
+        <div style={{ position: 'fixed', right: 24, bottom: 100 }}>
           <Button onClick={nl.openAdd}>＋</Button>
         </div>
       </Section>

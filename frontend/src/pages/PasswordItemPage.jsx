@@ -96,7 +96,7 @@ export default function PasswordItemPage() {
         )}
 
         {/* 右下＋：この item に entry を追加 */}
-        <div style={{ position: 'fixed', right: 24, bottom: 24 }}>
+        <div style={{ position: 'fixed', right: 24, bottom: 100 }}>
           <Button onClick={pe.openAdd}>＋</Button>
         </div>
       </Section>

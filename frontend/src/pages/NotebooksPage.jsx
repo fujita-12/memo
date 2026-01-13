@@ -36,7 +36,7 @@ export default function NotebooksPage() {
           </div>
         ))}
 
-        <div style={{ position: 'fixed', right: 24, bottom: 24 }}>
+        <div style={{ position: 'fixed', right: 24, bottom: 100 }}>
           <Button onClick={() => nav('/notebooks/create')}>＋</Button>
         </div>
       </Section>

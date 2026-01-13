@@ -126,7 +126,7 @@ export default function PasswordItemsPage() {
         })}
 
         {/* 右下＋：Password（箱）を追加（名前だけ） */}
-        <div style={{ position: 'fixed', right: 24, bottom: 24 }}>
+        <div style={{ position: 'fixed', right: 24, bottom: 100 }}>
           <Button onClick={pw.openAdd}>＋</Button>
         </div>
       </Section>

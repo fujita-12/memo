@@ -1,0 +1,69 @@
+/* src/components/Button.module.css */
+
+.btn {
+  display: block;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 10px;
+  padding: 18px 20px;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  box-sizing: border-box;
+  width: 100%;
+  text-align: center;
+}
+
+.disabled,
+.btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+/* size */
+.size_sm {
+  padding: 8px 10px;
+  font-size: 13px;
+  border-radius: 10px;
+  max-width: 200px;
+}
+.size_md {
+  padding: 12px 18px;
+  font-size: 16px;
+  max-width: 300px
+}
+.size_lg {
+  padding: 14px 20px;
+  font-size: 18px;
+  border-radius: 14px;
+  max-width: 400px;
+}
+
+/* align（ボタン自体の配置） */
+.align_left {
+  margin-right: auto;
+}
+.align_center {
+  margin-left: auto;
+  margin-right: auto;
+}
+.align_right {
+  margin-left: auto;
+}
+
+/* variant */
+.variant_primary {
+  background: #4FC0C2;
+  color: #fff;
+}
+.variant_black {
+  background: #3E3E3E;
+  color: #fff;
+}
+.variant_danger {
+  background: #E20000;
+  color: #fff;
+}

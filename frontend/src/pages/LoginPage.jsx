@@ -1,6 +1,7 @@
 // src/pages/LoginPage.jsx
 import { useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { LockKeyholeOpen } from 'lucide-react';
 
 import AppShell from '../components/AppShell.jsx';
 import TextField from '../components/TextField.jsx';
@@ -8,6 +9,8 @@ import Button from '../components/Button.jsx';
 import { pickLaravelErrors } from '../utils/pickLaravelErrors.js';
 import { login, getUser } from '../api/client';
 import { consumeFlashInfo, consumeFlashEmail } from '../utils/sessionFlash.js';
+
+import styles from './LoginPage.module.css';
 
 export default function LoginPage({ onLoggedIn }) {
   const navigate = useNavigate();
@@ -71,24 +74,48 @@ export default function LoginPage({ onLoggedIn }) {
   };
 
   return (
-    <AppShell info={info} error={error}>
-      <h2>Login</h2>
-
-      <TextField placeholder="email" value={email} onChange={setEmail} readOnly={loading} />
-      {fieldErrors.email && <p className="flashErr">{fieldErrors.email[0]}</p>}
-
-      <div className="mt8" />
-      <TextField placeholder="password" type="password" value={password} onChange={setPassword} readOnly={loading} />
-      {fieldErrors.password && <p className="flashErr">{fieldErrors.password[0]}</p>}
-      <p className="password-text" onClick={() => navigate('/forgot')} disabled={loading}>パスワードを忘れた方はこちら</p>
-      <div className="mt12 row">
-        <Button onClick={handleLogin} disabled={loading}>
-          {loading ? '...' : 'Login'}
-        </Button>
-
-        <Button onClick={() => navigate('/register')} disabled={loading}>
-          新規登録
-        </Button>
+    <AppShell info={info} error={error} showTabs={false}>
+      <div className={`${styles.loginBox} default-box-bg`}>
+        <h2>Login</h2>
+        <table className="main-table">
+          <tbody>
+            <tr>
+              <th>メールアドレス</th>
+              <td>
+                <TextField placeholder="example@example.com" value={email} onChange={setEmail} readOnly={loading} />
+                {fieldErrors.email && <p className="flashErr">{fieldErrors.email[0]}</p>}
+              </td>
+            </tr>
+            <tr>
+              <th>パスワード</th>
+              <td>
+                <TextField placeholder="passwordを入力してください" type="password" value={password} onChange={setPassword} readOnly={loading} />
+                {fieldErrors.password && <p className="flashErr">{fieldErrors.password[0]}</p>}
+              </td>
+            </tr>
+          </tbody>
+        </table> 
+        <p
+          className={`password-text ${loading ? 'isDisabled' : ''}`}
+          onClick={() => {
+            if (loading) return;
+            navigate('/forgot');
+          }}
+        >
+          <LockKeyholeOpen size={16} />
+          パスワードを忘れた方はこちら
+        </p>
+        <div className="mt36">
+          <Button onClick={handleLogin} disabled={loading} variant="primary" size="md" align="center">
+            {loading ? '...' : 'ログイン'}
+          </Button>
+        </div>
+        <hr />
+        <div>
+          <Button to="/register" disabled={loading} variant="black" size="md" align="center">
+            新規登録
+          </Button>
+        </div>
       </div>
     </AppShell>
   );
