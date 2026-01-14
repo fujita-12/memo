@@ -34,33 +34,46 @@ export default function SettingsEmailPage({ user, onUserUpdated }) {
           </p>
         )}
 
-        <TextField
-          placeholder="new email"
-          value={email.newEmail}
-          onChange={email.setNewEmail}
-          readOnly={email.loadingEmail}
-        />
-        {email.emailFieldErrors.new_email && (
-          <p className="flashErr">{email.emailFieldErrors.new_email[0]}</p>
-        )}
-
-        <div className="mt8" />
-
-        <TextField
-          placeholder="current password"
-          type="password"
-          value={email.emailChangePw}
-          onChange={email.setEmailChangePw}
-          readOnly={email.loadingEmail}
-        />
-        {email.emailFieldErrors.current_password && (
-          <p className="flashErr">{email.emailFieldErrors.current_password[0]}</p>
-        )}
-
-        <div className="mt12 row">
+        <table className="main-table">
+          <tbody>
+            <tr>
+              <th>メールアドレス</th>
+              <td>
+                <TextField
+                  placeholder="新しいメールアドレスを入力してください"
+                  value={email.newEmail}
+                  onChange={email.setNewEmail}
+                  readOnly={email.loadingEmail}
+                />
+                {email.emailFieldErrors.new_email && (
+                  <p className="flashErr">{email.emailFieldErrors.new_email[0]}</p>
+                )}
+              </td>
+            </tr>
+            <tr>
+              <th>パスワード</th>
+              <td>
+                <TextField
+                  placeholder="current password"
+                  type="パスワードを入力してください"
+                  value={email.emailChangePw}
+                  onChange={email.setEmailChangePw}
+                  readOnly={email.loadingEmail}
+                />
+                {email.emailFieldErrors.current_password && (
+                  <p className="flashErr">{email.emailFieldErrors.current_password[0]}</p>
+                )}
+              </td>
+            </tr>
+          </tbody>
+        </table> 
+        <div className="mt24 row">
           <Button
             onClick={email.requestEmailChangeAction}
             disabled={email.loadingEmail || !email.newEmail || !email.emailChangePw}
+            variant="primary" 
+            size="md" 
+            align="center"
           >
             {email.loadingEmail ? '...' : '承認/拒否リンクを送る'}
           </Button>

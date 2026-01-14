@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { listNotebooks, createNotebook, deleteNotebook } from '../api/client';
+import { listNotebooks, createNotebook, updateNotebook, deleteNotebook } from '../api/client';
 
 export function useNotebooksIndex({ flash }) {
   const [notebooks, setNotebooks] = useState([]);
@@ -8,6 +8,8 @@ export function useNotebooksIndex({ flash }) {
   const [title, setTitle] = useState('');
   const [fieldErrors, setFieldErrors] = useState({});
   const [creating, setCreating] = useState(false);
+
+  const [updatingId, setUpdatingId] = useState(null);
   const [deletingId, setDeletingId] = useState(null);
 
   const reqIdRef = useRef(0);
@@ -53,9 +55,34 @@ export function useNotebooksIndex({ flash }) {
     }
   };
 
+  // タイトル更新
+  const updateAction = async (id, payload) => {
+    flash.reset();
+    setFieldErrors({});
+    setUpdatingId(id);
+
+    try {
+      const updated = await updateNotebook(id, payload);
+
+      setNotebooks((p) => p.map((x) => (x.id === id ? updated : x)));
+
+      // メッセージが欲しければ
+      flash.info = '更新しました';
+
+      return updated;
+    } catch (e) {
+      const errs = flash.fail(e, '更新に失敗しました');
+      setFieldErrors(errs);
+      return null;
+    } finally {
+      setUpdatingId(null);
+    }
+  };
+
   const deleteAction = async (id, { confirmed } = { confirmed: false }) => {
     flash.reset();
     if (!confirmed) return;
+
     setDeletingId(id);
     try {
       await deleteNotebook(id);
@@ -74,8 +101,12 @@ export function useNotebooksIndex({ flash }) {
     title,
     setTitle,
     fieldErrors,
+
     creating,
     createAction,
+
+    updatingId,
+    updateAction,
 
     deletingId,
     deleteAction,

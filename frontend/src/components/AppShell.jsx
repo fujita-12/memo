@@ -20,7 +20,7 @@ export default function AppShell({ info, error, children, showTabs = true }) {
 
   return (
     <div className="app">
-      <main className={`appMain ${showTabs ? '' : 'noTabs'}`}>
+      <main className={`appMain ${showTabs ? 'tabPage' : 'noTabs'}`}>
         <div className="appMainInner">
           {(info || error) && (
             <div className="flashArea" role="status" aria-live="polite">
@@ -44,7 +44,7 @@ export default function AppShell({ info, error, children, showTabs = true }) {
               aria-label="MENU"
             >
               <span className="tabIcon" aria-hidden="true">
-                <LayoutGrid size={20} />
+                <LayoutGrid size={25} />
               </span>
               <span className="tabLabel">MENU</span>
             </NavLink>
@@ -55,7 +55,7 @@ export default function AppShell({ info, error, children, showTabs = true }) {
               aria-label="NOTEBOOK"
             >
               <span className="tabIcon" aria-hidden="true">
-                <Notebook size={20} />
+                <Notebook size={25} />
               </span>
               <span className="tabLabel">NOTEBOOK</span>
             </NavLink>
@@ -66,7 +66,7 @@ export default function AppShell({ info, error, children, showTabs = true }) {
               aria-label="PASSWORD"
             >
               <span className="tabIcon" aria-hidden="true">
-                <KeyRound size={20} />
+                <KeyRound size={25} />
               </span>
               <span className="tabLabel">PASSWORD</span>
             </NavLink>

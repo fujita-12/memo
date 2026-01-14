@@ -1,0 +1,413 @@
+/* ノートブック、パスワードリスト作成 */
+.notePassPage .createInput {
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+  position: relative;
+}
+.notePassPage .createInput input {
+  border: none;
+  background-color: #fff;
+  border-bottom: 1px solid #DDDDDD;
+  border-radius: 0;
+  padding: 20px 20px 20px 50px;
+}
+.notePassPage .createInput input::placeholder {
+  color: #DDDDDD;
+}
+.notePassPage .createInput input:focus-visible {
+  outline: none;
+  border-bottom: 1px solid #4FC0C2;
+}
+.notePassPage .createInput svg {
+  position: absolute;
+  left: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+/* ノートブック、パスワードリスト一覧 */
+.notePassPage .itemList {
+  width: 100%;
+  max-width: 600px;
+  margin: 30px auto 0;
+}
+.notePassPage .itemList .itemLength {
+  font-size: 0.9rem;
+  color: #707070;
+}
+.notePassPage .itemList .listRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #DDDDDD;
+}
+.notePassPage .itemList .listRow:first-of-type {
+  border-top: 1px solid #DDDDDD;
+}
+.notePassPage .itemList .listRow .linkLike {
+  text-decoration: none;
+  color: #333333;
+  font-size: 1.1rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  padding: 20px 0;
+  box-sizing: border-box;
+}
+
+
+/* ===== Swipe row ===== */
+.notePassPage .swipeRow {
+  position: relative;
+  overflow: hidden;
+  border-bottom: 1px solid #DDDDDD;
+}
+.notePassPage .swipeRow:first-of-type {
+  border-top: 1px solid #DDDDDD;
+}
+
+/* 背面（右側ボタン） */
+.notePassPage .swipeActions {
+  position: absolute;
+  inset: 0 0 0 auto;
+  display: flex;
+  justify-content: flex-end;
+  align-items: stretch;
+}
+
+.notePassPage .swipeBtn {
+  border: none;
+  outline: none;
+  cursor: pointer;
+  height: 100%;
+  min-width: 56px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-weight: 600;
+}
+
+.notePassPage .swipeBtnMenu {
+  background: #666;
+  color: #fff;
+  width: 56px;
+}
+
+.notePassPage .swipeBtnDelete {
+  background: #e60000;
+  color: #fff;
+  width: 68px;
+}
+
+/* 表側（スワイプする本体） */
+.notePassPage .swipeContent {
+  background: #fff;
+  will-change: transform;
+  transition: transform 0.18s ease;
+}
+.notePassPage .swipeContent.isDragging {
+  transition: none;
+}
+
+.notePassPage .swipeLink {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 18px 0;
+}
+
+.notePassPage .swipeIcon {
+  padding-left: 4px;
+  display: inline-flex;
+}
+.notePassPage .swipeTitle {
+  font-size: 1.1rem;
+  font-weight: 500;
+}
+
+/* ===== Bottom sheet ===== */
+.sheetOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.35);
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  z-index: 2000;
+  padding: 12px;
+}
+
+.sheetPanel {
+  width: min(560px, 100%);
+  background: #fff;
+  border-radius: 16px;
+  padding: 14px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+  animation: sheetUp 0.18s ease;
+}
+
+@keyframes sheetUp {
+  from { transform: translateY(18px); opacity: 0.8; }
+  to   { transform: translateY(0); opacity: 1; }
+}
+
+.sheetTitle {
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+.sheetAction {
+  width: 100%;
+  border: 1px solid #e5e7eb;
+  background: #fff;
+  border-radius: 12px;
+  padding: 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  margin-bottom: 10px;
+}
+
+.sheetDanger {
+  border-color: #ffd2d2;
+  color: #c40000;
+}
+
+.sheetCancel {
+  width: 100%;
+  border: none;
+  background: #f3f4f6;
+  border-radius: 12px;
+  padding: 12px;
+  cursor: pointer;
+}
+
+.sheetRow {
+  margin-top: 12px;
+}
+
+.sheetPrimary {
+  width: 100%;
+  border: none;
+  background: #4FC0C2;
+  color: #fff;
+  border-radius: 12px;
+  padding: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+/* ===== BottomSheet ===== */
+.sheetOverlay{
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  z-index: 2000;
+}
+
+.sheetPanel{
+  width: min(640px, 100%);
+  background: #fff;
+  border-radius: 16px 16px 0 0;
+  padding: 14px 14px 22px;
+  box-shadow: 0 -10px 30px rgba(0,0,0,0.18);
+  animation: sheetUp .18s ease-out;
+}
+
+@keyframes sheetUp{
+  from { transform: translateY(25px); opacity: 0.6; }
+  to   { transform: translateY(0); opacity: 1; }
+}
+
+.sheetHeader{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #eee;
+}
+
+.sheetTitle{ font-weight: 700; }
+.sheetClose{
+  border: none;
+  background: transparent;
+  color: #4FC0C2;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.sheetBody{ padding-top: 14px; }
+
+.sheetBtns{
+  display: grid;
+  gap: 10px;
+}
+
+.sheetBtn{
+  width: 100%;
+  display:flex;
+  align-items:center;
+  gap: 10px;
+  padding: 14px 12px;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+  background: #fff;
+  cursor: pointer;
+  font-weight: 600;
+}
+.sheetBtn.danger{
+  border-color: #ffb4b4;
+  color: #d10000;
+}
+
+/* ===== Desktop row: … button only ===== */
+.notePassPage .itemList .listRowDesktop{
+  display:flex;
+  justify-content: space-between;
+  align-items:center;
+}
+.notePassPage .itemList .rowLink{
+  display:flex;
+  gap: 10px;
+  align-items:center;
+  flex: 1;
+}
+.notePassPage .itemList .rowTitle{
+  display:inline-block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 520px;
+}
+
+.moreBtn{
+  border: none;
+  background: #f4f4f4;
+  border-radius: 10px;
+  height: 36px;
+  width: 44px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  cursor: pointer;
+}
+
+/* ===== Swipe row (mobile only used) ===== */
+.swipeWrap{
+  position: relative;
+  overflow: hidden;
+}
+
+.swipeFront{
+  position: relative;
+  background: #fff;
+  transition: transform .15s ease-out;
+}
+
+.rowContent{
+  position: relative;
+}
+
+/* 背面アクション（右側） */
+.rowActionsBack{
+  position:absolute;
+  top: 0;
+  right: 0;
+  height: 100%;
+  display:flex;
+  align-items: stretch;
+  gap: 0;
+}
+
+.backBtn{
+  border: none;
+  height: 100%;
+  padding: 0 16px;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.backMenu{
+  background: #888;
+  color: #fff;
+  min-width: 56px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.backDelete{
+  background: #ff0000;
+  color: #fff;
+  min-width: 84px;
+}
+
+/* スマホのスワイプ行は flex をやめる（元の .listRow がflexなので上書き） */
+.notePassPage .itemList .listRow.listRowSwipe{
+  display: block;
+}
+
+/* Swipeの基本構造 */
+.swipeWrap{
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+}
+
+/* 背面（右側に固定表示される領域） */
+.swipeBack{
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 100%;
+  display: flex;
+  align-items: stretch;
+  justify-content: flex-end;
+  z-index: 1;
+}
+
+/* 前面（ここがスライドする） */
+.swipeFront{
+  position: relative;
+  width: 100%;
+  background: #fff;
+  z-index: 2;
+  transition: transform .15s ease-out;
+}
+
+/* 背面のボタン並び */
+.rowActionsBack{
+  height: 100%;
+  display: flex;
+  align-items: stretch;
+}
+
+/* 背面ボタン */
+.backBtn{
+  border: none;
+  height: 100%;
+  padding: 0 16px;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.backMenu{
+  background: #888;
+  color: #fff;
+  min-width: 56px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.backDelete{
+  background: #ff0000;
+  color: #fff;
+  min-width: 84px;
+}

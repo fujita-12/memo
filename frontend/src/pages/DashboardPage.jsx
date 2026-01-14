@@ -2,39 +2,60 @@
 
 import { Link } from 'react-router-dom';
 import AppShell from '../components/AppShell.jsx';
-import Section from '../components/Section.jsx';
+import PageDefault from '../components/PageDefault.jsx';
 import { useFlash } from '../hooks/useFlash.js';
 import { Notebook, KeyRound } from 'lucide-react';
+
+import styles from './DashboardPage.module.css';
 
 export default function DashboardPage() {
   const flash = useFlash();;
 
   return (
     <AppShell info={flash.info} error={flash.error}>
-      <Section title="Dashboard">
-        <div style={{ display: 'grid', gap: 12 }}>
-          <Link className="linkLike" to="/notebooks/create">
-            <Notebook size={20} />
-            新規ノートブックを作成
+      <PageDefault title="Dashboard">
+        <div className={`${styles.contentFlex} mt36`}>
+          <Link className={`${styles.linkButtonA} ${styles.colorA} linkLike`} to="/notebooks/create">
+            <p>
+              <Notebook size={30} />
+                +新規ノートブックを作成
+            </p>
+            <span>+Notebook</span>
           </Link>
-          <Link className="linkLike" to="/password-lists/create">
-            <KeyRound size={20} />
-            新規パスワードを作成
-          </Link>
-        </div>
-        <div style={{ display: 'grid', gap: 12 }}>
-          <Link className="linkLike" to="/notebooks">
-            <Notebook size={20} />
-            Notebooks を開く
-          </Link>
-
-          <Link className="linkLike" to="/password-lists">
-            <KeyRound size={20} />
-            Password を開く
+          <Link className={`${styles.linkButtonA} ${styles.colorB} linkLike`} to="/password-lists/create">
+            <p>
+              <KeyRound size={30} />
+                +新規パスワードを作成
+            </p>
+            <span>+Password</span>
           </Link>
         </div>
-        
-      </Section>
+        <hr className={styles.hr} />
+        <div className={`${styles.contentFlex} mt36`}>
+          <Link className={`${styles.linkButtonB} ${styles.colorC} linkLike`} to="/notebooks">
+            <div className={styles.buttonText}>
+              <div className={styles.buttonIcon}>
+                <Notebook size={30} />
+              </div>
+              <p>
+                <span>Notebook</span><br />
+                ノートブック一覧
+              </p>
+            </div>
+          </Link>
+          <Link className={`${styles.linkButtonB} ${styles.colorC} linkLike`} to="/password-lists">
+            <div className={styles.buttonText}>
+              <div className={styles.buttonIcon}>
+                <KeyRound size={30} />
+              </div>
+              <p>
+                <span>Password</span><br />
+                パスワードリスト一覧
+              </p>
+            </div>
+          </Link>
+        </div>
+      </PageDefault>
     </AppShell>
   );
 }

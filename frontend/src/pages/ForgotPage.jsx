@@ -28,7 +28,7 @@ export default function ForgotPage() {
     setLoading(true);
     try {
       await forgotPassword({ email });
-      setInfo('パスワード再設定メールを送信しました。Mailpit（http://localhost:8025）を確認してください。');
+      setInfo('パスワード再設定メールを送信しました。');
     } catch (e) {
       const { message, fieldErrors } = pickLaravelErrors(e);
       setError(message || '送信に失敗しました');

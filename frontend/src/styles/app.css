@@ -1,6 +1,6 @@
 /* ===== Layout ===== */
 .app {
-  min-height: calc(100vh - 89px);
+  min-height: calc(100vh - 88px);
   display: flex;
   flex-direction: column;
 }
@@ -24,7 +24,6 @@
   background: #fafafa;
 }
 .appFooter {
-  border-top: 1px solid #e5e7eb;
   background: #fff;
 }
 .muted {
@@ -117,8 +116,7 @@
   right: 0;
   bottom: 0;
   z-index: 50;
-  border-top: 1px solid #e5e7eb;
-  background: #fff;
+  background: #FAFAFA;
 }
 
 /* 中身の横幅は既存 appFooterInner を使う */
@@ -180,6 +178,10 @@
   padding-bottom: env(safe-area-inset-bottom);
 }
 
+.appMain.tabPage {
+  background-color: #fff;
+}
+
 /* コピーライト */
 .copy {
   text-align: center;
@@ -199,7 +201,7 @@
 .default-box-bg h2 {
   text-align: center;
   margin: 0 0 30px;
-  font-size: 2rem;
+  font-size: 1.6rem;
 }
 .main-table {
   width: 100%;
@@ -232,4 +234,20 @@
   margin: 36px 0;
   border: none;
   border-top: 1px solid #DDDDDD;
+}
+
+/* ログイン後共通タイトルエリア */
+.page-default .titleArea {
+  text-align: center;
+}
+.page-default .titleArea h1 {
+  margin: 0;
+  font-size: 1.8rem;
+  font-weight: 500;
+  color: #4FC0C2;
+}
+.page-default .titleArea .date {
+  margin-top: 5px;
+  font-size: 0.8rem;
+  color: #707070;
 }

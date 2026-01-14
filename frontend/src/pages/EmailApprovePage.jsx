@@ -16,7 +16,7 @@ export default function EmailApprovePage() {
   const [info, setInfo] = useState('');
   const [error, setError] = useState('');
 
-  // ✅ 処理済みフラグ（tokenを消しても「tokenが無いエラー」を出さないため）
+  // 処理済みフラグ（tokenを消しても「tokenが無いエラー」を出さないため）
   const [done, setDone] = useState(false);
 
   const resetMessages = () => {
@@ -48,10 +48,10 @@ export default function EmailApprovePage() {
         setError('リンクが無効、または処理済みです。');
       }
 
-      // ✅ 「処理済み」扱いにして token無しエラー表示を止める
+      //「処理済み」扱いにして token無しエラー表示を止める
       setDone(true);
 
-      // ✅ tokenをURLから消してページに残す
+      // tokenをURLから消してページに残す
       navigate('/email/approve', { replace: true });
     } catch (e) {
       const { message } = pickLaravelErrors(e);
@@ -61,7 +61,7 @@ export default function EmailApprovePage() {
     }
   };
 
-  // ✅ token無しエラーは「未処理の時だけ」表示
+  // token無しエラーは「未処理の時だけ」表示
   const showTokenMissing = !token && !done && !info && !error;
 
   return (
@@ -77,12 +77,13 @@ export default function EmailApprovePage() {
             <>
               <p className="small">承認すると、新しいメールアドレスに「確定リンク」を送信します。</p>
 
-              <div className="row mt12">
-                <Button onClick={handleApprove} disabled={loading}>
+              <div className="mt24">
+                <Button onClick={handleApprove} disabled={loading} variant="primary" size="md" align="center">
                   {loading ? '...' : '承認する'}
                 </Button>
-
-                <Button onClick={() => navigate('/login', { replace: true })} disabled={loading}>
+              </div>
+              <div className="mt24">
+                <Button onClick={() => navigate('/login', { replace: true })} disabled={loading} variant="black" size="md" align="center">
                   Loginへ戻る
                 </Button>
               </div>
@@ -91,8 +92,8 @@ export default function EmailApprovePage() {
 
           {/* 処理後は、戻るボタンだけ出す（好みで） */}
           {!token && (info || error || done) && (
-            <div className="row mt12">
-              <Button onClick={() => navigate('/login', { replace: true })} disabled={loading}>
+            <div className="mt24">
+              <Button onClick={() => navigate('/login', { replace: true })} disabled={loading} variant="black" size="md" align="center">
                 Loginへ戻る
               </Button>
             </div>

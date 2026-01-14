@@ -1,10 +1,13 @@
 import { useNavigate } from 'react-router-dom';
 import AppShell from '../components/AppShell.jsx';
-import Section from '../components/Section.jsx';
+import PageDefault from '../components/PageDefault.jsx';
 import TextField from '../components/TextField.jsx';
 import Button from '../components/Button.jsx';
 import { useFlash } from '../hooks/useFlash.js';
 import { usePasswordVault } from '../hooks/usePasswordVault.js';
+import { KeyRound } from 'lucide-react';
+
+import '../styles/note-pass.css';
 
 export default function PasswordListCreatePage() {
   const flash = useFlash();
@@ -13,16 +16,20 @@ export default function PasswordListCreatePage() {
 
   return (
     <AppShell info={flash.info} error={flash.error}>
-      <Section title="PasswordList 作成">
-        <TextField
-          placeholder="パスワードリストの名前"
-          value={pv.listTitle}
-          onChange={pv.setListTitle}
-          readOnly={pv.creatingList}
-        />
-        {pv.listFieldErrors.title && <p className="flashErr">{pv.listFieldErrors.title[0]}</p>}
-
-        <div className="mt12 row">
+      <PageDefault title="PasswordList作成" className="notePassPage">
+        <div className="createInput">
+          <KeyRound size={30} />
+          <TextField
+            id="passwor-title"
+            name="password-title"
+            placeholder="パスワードリストの名前"
+            value={pv.listTitle}
+            onChange={pv.setListTitle}
+            readOnly={pv.creatingList}
+          />
+          {pv.listFieldErrors.title && <p className="flashErr">{pv.listFieldErrors.title[0]}</p>}
+        </div>
+        <div className="mt36">
           <Button
             onClick={async () => {
               const created = await pv.createListAction();
@@ -30,15 +37,19 @@ export default function PasswordListCreatePage() {
               nav(`/password-lists/${created.id}`, { replace: true });
             }}
             disabled={pv.creatingList || !pv.listTitle}
+            variant="primary" 
+            size="md" 
+            align="center"
           >
             {pv.creatingList ? '...' : '作成する'}
           </Button>
-
-          <Button onClick={() => nav('/password-lists')} disabled={pv.creatingList}>
+        </div>
+        <div className="mt24">
+          <Button to="/password-lists" disabled={pv.creatingList} variant="black" size="md" align="center">
             戻る
           </Button>
         </div>
-      </Section>
+      </PageDefault>
     </AppShell>
   );
 }

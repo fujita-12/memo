@@ -7,7 +7,7 @@ import { useFlash } from '../../hooks/useFlash.js';
 import { useAccountDeletion } from '../../hooks/useAccountDeletion.js';
 import { setFlashInfo } from '../../utils/sessionFlash.js';
 
-export default function SettingsDeletePage({ user, onLoggedOut }) {
+export default function SettingsDeletePage({ onLoggedOut }) {
   const flash = useFlash();
 
   const del = useAccountDeletion({
@@ -23,23 +23,29 @@ export default function SettingsDeletePage({ user, onLoggedOut }) {
 
   return (
     <AppShell info={flash.info} error={flash.error}>
-      <p>ログイン中: {user.email}</p>
-
       <Section title="退会（アカウント削除）">
         <p className="small">確認のため現在のパスワードを入力してください。</p>
 
-        <TextField
-          placeholder="現在のパスワード"
-          type="password"
-          value={del.deletePw}
-          onChange={del.setDeletePw}
-          readOnly={del.loadingDelete}
-        />
-        {del.deleteFieldErrors.current_password && (
-          <p className="flashErr">{del.deleteFieldErrors.current_password[0]}</p>
-        )}
-
-        <div className="mt12 row">
+        <table className="main-table">
+          <tbody>
+            <tr>
+              <th>パスワード</th>
+              <td>
+                <TextField
+                  placeholder="現在のパスワード"
+                  type="password"
+                  value={del.deletePw}
+                  onChange={del.setDeletePw}
+                  readOnly={del.loadingDelete}
+                />
+                {del.deleteFieldErrors.current_password && (
+                  <p className="flashErr">{del.deleteFieldErrors.current_password[0]}</p>
+                )}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div className="mt24">
           <Button
             onClick={() => {
               const ok = confirm('本当に退会しますか？ノート/ノートブックも全て削除されます。');
@@ -47,6 +53,9 @@ export default function SettingsDeletePage({ user, onLoggedOut }) {
               del.deleteAccountAction({ confirmed: true });
             }}
             disabled={del.loadingDelete || !del.deletePw}
+            variant="danger" 
+            size="md" 
+            align="center"
           >
             {del.loadingDelete ? '...' : '退会する'}
           </Button>

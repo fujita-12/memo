@@ -71,12 +71,13 @@ export default function EmailCancelPage() {
             <>
               <p className="small">心当たりがない場合は拒否してください。</p>
 
-              <div className="row mt12">
-                <Button onClick={handleCancel} disabled={loading}>
+              <div className="mt24">
+                <Button onClick={handleCancel} disabled={loading} variant="primary" size="md" align="center">
                   {loading ? '...' : '拒否する'}
                 </Button>
-
-                <Button onClick={() => navigate('/login', { replace: true })} disabled={loading}>
+              </div>
+              <div className="mt24">
+                <Button onClick={() => navigate('/login', { replace: true })} disabled={loading} variant="black" size="md" align="center">
                   Loginへ戻る
                 </Button>
               </div>
@@ -86,7 +87,7 @@ export default function EmailCancelPage() {
           {/* 処理後は、戻るボタンだけ出す（好みで） */}
           {!token && (info || error) && (
             <div className="row mt12">
-              <Button onClick={() => navigate('/login', { replace: true })} disabled={loading}>
+              <Button onClick={() => navigate('/login', { replace: true })} disabled={loading} variant="black" size="md" align="center">
                 Loginへ戻る
               </Button>
             </div>
