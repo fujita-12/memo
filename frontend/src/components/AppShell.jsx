@@ -19,8 +19,8 @@ export default function AppShell({ info, error, children, showTabs = true }) {
   }, [location.pathname]);
 
   return (
-    <div className="app">
-      <main className={`appMain ${showTabs ? 'tabPage' : 'noTabs'}`}>
+    <div className={`app ${showTabs ? 'tabPage' : 'noTabs'}`}>
+      <main className={`appMain`}>
         <div className="appMainInner">
           {(info || error) && (
             <div className="flashArea" role="status" aria-live="polite">

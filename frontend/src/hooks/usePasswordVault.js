@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import {
   listPasswordLists,
   createPasswordList,
+  updatePasswordList,
   deletePasswordList,
   listPasswordItems,
   createPasswordItem,
@@ -62,6 +63,18 @@ export function usePasswordVault({ flash }) {
       return null;
     } finally {
       setCreatingList(false);
+    }
+  };
+
+  const updateListAction = async (listId, payload) => {
+    flash.reset();
+    try {
+      const updated = await updatePasswordList(listId, payload);
+      setLists((p) => p.map((x) => (x.id === listId ? updated : x)));
+      return updated;
+    } catch (e) {
+      flash.fail(e, '更新に失敗しました');
+      return null;
     }
   };
 
@@ -145,7 +158,7 @@ export function usePasswordVault({ flash }) {
     }
   };
 
-  // ✅ 一覧で「タップでコピー」：押した瞬間だけ詳細を取得してコピー
+  // 一覧で「タップでコピー」：押した瞬間だけ詳細を取得してコピー
   const copySecretAction = async (itemId) => {
     flash.reset();
     try {
@@ -161,7 +174,7 @@ export function usePasswordVault({ flash }) {
     // lists
     lists, listTitle, setListTitle, listFieldErrors,
     creatingList, deletingListId,
-    createListAction, deleteListAction,
+    createListAction, updateListAction, deleteListAction,
 
     // selected + items
     selectedList, items, openingListId,

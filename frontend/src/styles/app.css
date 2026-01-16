@@ -1,6 +1,9 @@
+* {
+  box-sizing: border-box;
+}
 /* ===== Layout ===== */
 .app {
-  min-height: calc(100vh - 88px);
+  min-height: calc(100vh - 60px);
   display: flex;
   flex-direction: column;
 }
@@ -50,12 +53,14 @@
   background: #ecfdf5;
   border: 1px solid #a7f3d0;
   color: #065f46;
+  margin-top: 10px;
 }
 
 .flashErr {
   background: #fef2f2;
   border: 1px solid #fecaca;
   color: #991b1b;
+  margin-top: 10px;
 }
 
 /* ===== Utility ===== */
@@ -169,7 +174,7 @@
   padding-bottom: 86px;
 }
 /* showTabs=false のときは下余白いらない */
-.appMain.noTabs {
+.noTabs .appMain {
   padding-bottom: 0;
 }
 
@@ -178,7 +183,7 @@
   padding-bottom: env(safe-area-inset-bottom);
 }
 
-.appMain.tabPage {
+.tabPage .appMain {
   background-color: #fff;
 }
 
@@ -213,9 +218,11 @@
   width: 25%;
   min-width: 120px;
   vertical-align: middle;
+  box-sizing: border-box;
 }
 .main-table td {
   padding: 14px 0 14px 16px;
+  box-sizing: border-box;
 }
 .default-box-bg .password-text {
   text-align: right;
@@ -250,4 +257,52 @@
   margin-top: 5px;
   font-size: 0.8rem;
   color: #707070;
+}
+
+@media only screen and (max-width: 1080px) {
+  
+}
+
+@media only screen and (max-width: 767px) {
+  .app {
+    min-height: calc(100vh - 120px);
+  }
+  .app.tabPage {
+    min-height: calc(100vh - 193px);
+  }
+  .appMainInner {
+    padding: 16px 16px 30px;
+  }
+  .default-box-bg {
+    border-radius: 10px;
+    padding: 24px 20px 30px;
+    margin-top: 20px;
+  }
+  .default-box-bg h2 {
+    margin: 0 0 20px;
+    font-size: 1.4rem;
+  }
+  .default-box-bg hr {
+    margin: 18px 0;
+  }
+  .main-table th {
+    padding: 10px 0 0;
+    width: 100%;
+    display: block;
+    font-size: 0.9rem;
+  }
+  .main-table td {
+    padding: 5px 0 10px;
+    width: 100%;
+    display: block;
+  }
+
+  /* フッタータブ */
+  .tabLabel {
+    font-size: 11px;
+  }
+  .tabIcon svg {
+    width: 20px;
+    height: 20px;
+  }
 }

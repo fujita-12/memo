@@ -8,7 +8,7 @@
 .linkButtonA {
   display: inline-block;
   padding: 40px 20px 25px;
-  width: 220px;
+  width: 250px;
   text-decoration: none;
   border-radius: 15px;
 }
@@ -36,18 +36,19 @@
   color: #fff;
 }
 .colorC {
-  background-color: #FAFAFA;
+  background-color: #f0f0f0;
   color: #333333;
 }
 .hr {
+  border: none;
   border-top: 1px solid #ddd;
-  margin: 50px 0;
+  margin: 40px 0;
 }
 /* ボタン下部 */
 .linkButtonB {
   display: inline-block;
   padding: 45px 20px 45px;
-  width: 220px;
+  width: 250px;
   text-decoration: none;
   border-radius: 15px;
 }
@@ -65,4 +66,53 @@
   font-size: 1.6rem;
   font-weight: 600;
   display: block;
+}
+
+@media only screen and (max-width: 1080px) {
+  
+}
+
+@media only screen and (max-width: 767px) {
+  .contentFlex {
+    gap: 10px;
+  }
+  .linkButtonA {
+    padding: 15px 10px 15px;
+    width: 160px;
+    border-radius: 10px;
+  }
+  .linkButtonA p {
+    gap: 8px;
+    font-size: 0.7rem;
+  }
+  .linkButtonA span {
+    font-size: 1.1rem;
+    margin-top: 10px;
+  }
+  .linkButtonA svg {
+    width: 24px;
+    height: 24px;
+  }
+  .linkButtonB {
+    padding: 20px 5px 25px 10px;
+    width: 160px;
+    border-radius: 10px;
+  }
+  .linkButtonB .buttonText {
+    gap: 8px;
+  }
+  .linkButtonB .buttonText p {
+    font-size: 0.65rem;
+    line-height: 1.2;
+  }
+  .linkButtonB .buttonText p span {
+    font-size: 1.1rem;
+  }
+  .linkButtonB svg {
+    width: 24px;
+    height: 24px;
+  }
+  .hr {
+    margin: 24px 0;
+  }
 }

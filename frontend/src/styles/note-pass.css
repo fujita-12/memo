@@ -35,6 +35,7 @@
 .notePassPage .itemList .itemLength {
   font-size: 0.9rem;
   color: #707070;
+  margin-bottom: 5px;
 }
 .notePassPage .itemList .listRow {
   display: flex;
@@ -42,7 +43,7 @@
   align-items: center;
   border-bottom: 1px solid #DDDDDD;
 }
-.notePassPage .itemList .listRow:first-of-type {
+.notePassPage .itemList .itemLength + .listRow {
   border-top: 1px solid #DDDDDD;
 }
 .notePassPage .itemList .listRow .linkLike {
@@ -260,6 +261,7 @@
   background: #fff;
   cursor: pointer;
   font-weight: 600;
+  color: #000;
 }
 .sheetBtn.danger{
   border-color: #ffb4b4;
@@ -400,7 +402,7 @@
 .backMenu{
   background: #888;
   color: #fff;
-  min-width: 56px;
+  min-width: 55px;
   display:flex;
   align-items:center;
   justify-content:center;
@@ -409,5 +411,519 @@
 .backDelete{
   background: #ff0000;
   color: #fff;
-  min-width: 84px;
+  min-width: 55px;
+}
+
+/* スワイプ UI */
+.swipeWrap {
+  position: relative;
+  overflow: hidden;
+}
+
+.swipeBack {
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  display: flex;
+  align-items: stretch;
+  justify-content: flex-end;
+}
+
+.swipeFront {
+  position: relative;
+  background: #fff;
+  will-change: transform;
+  transition: transform 160ms ease;
+  touch-action: pan-y; /* ✅ 基本は縦スクロールOK */
+}
+
+/* 開いてる時はアニメを気持ち速く */
+.swipeWrap.isOpen .swipeFront {
+  transition: transform 140ms ease;
+}
+
+.swipeWrap {
+  position: relative;
+  overflow: hidden;
+}
+
+.swipeBack {
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  display: flex;
+  align-items: stretch;
+  justify-content: flex-end;
+}
+
+.swipeFront {
+  position: relative;
+  background: #fff;
+  will-change: transform;
+  transition: transform 160ms ease;
+  touch-action: pan-y;
+}
+
+/*  ドラッグ中はtransition切る（感度UP） */
+.swipeFront.isDragging {
+  transition: none;
+}
+
+/*  背景タップで閉じる用（透明レイヤー） */
+.swipeDismissOverlay {
+  position: fixed;
+  inset: 0;
+  background: transparent;
+  z-index: 10;
+}
+
+/* swipeRow自体より上にしたい場合は listRow側のz-index調整 */
+.listRowSwipe {
+  position: relative;
+  z-index: 11;
+}
+
+/* ===== Notes 一覧のRow用 ===== */
+.noteRow .noteRowLink {
+  width: 100%;
+  gap: 14px;
+  align-items: flex-start;
+}
+
+/* icon + text の右側 */
+.noteRow .noteRowText {
+  flex: 1;
+  display: grid;
+  gap: 4px;
+  min-width: 0; /* 省略/折返しのため */
+}
+
+.noteRow .noteRowTitle {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: #333;
+}
+
+/*  本文プレビュー：最大3行 */
+.noteRow .noteRowPreview {
+  color: #707070;
+  font-size: 0.9rem;
+  line-height: 1.4;
+  white-space: normal;
+
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.noteRow .noteRowDate {
+  font-size: 0.78rem;
+  color: #9aa0a6;
+  margin-top: 2px;
+  font-weight: 300;
+}
+
+/* PCの…ボタン（Notebooksと同じ見た目に寄せる想定） */
+.moreBtn {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+}
+
+/* ===== Password Items 一覧Row ===== */
+.pwRow .pwRowLink {
+  width: 100%;
+  gap: 14px;
+  align-items: flex-start;
+}
+
+.pwRow .pwRowText {
+  flex: 1;
+  display: grid;
+  gap: 6px;
+  min-width: 0;
+}
+
+.pwRow .pwRowTitle {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: #333;
+}
+
+/* プレビュー全体 */
+.pwRow .pwRowPreview {
+  color: #707070;
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+/* 3行分（3件分）を見せる意識 */
+.pwPreviewGrid {
+  display: grid;
+  gap: 8px;
+}
+
+/* label / value / copy */
+.pwPreviewRow {
+  display: grid;
+  grid-template-columns: 110px 1fr 34px;
+  gap: 10px;
+  align-items: center;
+}
+
+.pwPreviewLabel {
+  font-size: 12px;
+  color: #9aa0a6;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* value は1行省略でOK（クリックでコピー） */
+.pwPreviewValue {
+  font-size: 13px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  cursor: pointer;
+  padding: 0 8px;
+  background: #fff;
+}
+
+.pwCopyBtn {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  border: 1px solid #e5e7eb;
+  background: #fff;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+}
+
+/* ===== コピー吹き出しトースト ===== */
+.pwValueWrap {
+  position: relative;
+}
+
+.inlineToast {
+  position: absolute;
+  left: 10px;
+  bottom: calc(100% + 8px);
+  padding: 6px 10px;
+  font-size: 12px;
+  line-height: 1;
+  color: #fff;
+  background: #4FC0C2;
+  border-radius: 6px;
+  white-space: nowrap;
+  z-index: 5;
+  animation: toastFade 3s ease-in-out forwards;
+}
+
+.inlineToast::after {
+  content: '';
+  position: absolute;
+  left: 12px;
+  top: 100%;
+  width: 0;
+  height: 0;
+  border: 6px solid transparent;
+  border-top-color: #4FC0C2;
+}
+
+@keyframes toastFade {
+  0% {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  10% {
+    opacity: 1;
+    transform: translateY(0px);
+  }
+  80% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+}
+
+/* ノート編集ページ */
+.notePassPage.no-title .titleArea {
+  display: none;
+}
+.notePassPage .textareaWrap {
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+}
+.notePassPage .textareaWrap textarea {
+  width: 100%;
+  max-width: 600px;
+  min-height: 400px;
+  border: none;
+  outline: none;
+  font-size: 1rem;
+  line-height: 1.6;
+  color: #333;
+  resize: vertical;
+}
+.notePassPage .itemnameFlex {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  max-width: 600px;
+  margin: 0 auto;
+  color: #707070;
+  padding-left: 10px;
+}
+.notePassPage .itemnameFlex .itemname {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 300;
+  font-size: 0.8rem;
+}
+.notePassPage .itemnameFlex .small {
+  font-size: 0.7rem;
+  font-weight: 300;
+  color: #707070;
+}
+
+/* ========= Password 詳細（entries編集） ========= */
+
+.pwEntryList {
+  display: grid;
+  gap: 14px;
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.pwEntryRow {
+  position: relative;
+}
+
+.pwEntryFront {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+  padding: 12px 12px 10px;
+}
+
+.pwEntrySwipeFront {
+  background: transparent;
+}
+
+.pwEntryTop {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+
+.pwEntryTitleWrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+  min-width: 0;
+}
+
+.pwEntryTitleInput {
+  width: 100%;
+  font-weight: 700;
+  font-size: 14px;
+  border: none;
+  outline: none;
+  background: transparent;
+  padding: 4px 0;
+}
+
+.pwEntryBodyRow {
+  display: grid;
+  grid-template-columns: 1fr 44px;
+  gap: 10px;
+  margin-top: 8px;
+  align-items: start;
+}
+
+.pwEntryTextarea {
+  width: 100%;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 10px 12px;
+  outline: none;
+  resize: vertical;
+  min-height: 56px;
+  font-size: 14px;
+  line-height: 1.45;
+}
+
+.pwEntryTextarea:focus-visible {
+  border-color: #4FC0C2;
+}
+
+.pwEntrySide {
+  position: relative;
+  display: grid;
+  place-items: start;
+}
+
+.pwEntryCopyBtn {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+  background: #fff;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+}
+
+.pwInlineToast {
+  position: absolute;
+  top: -38px;
+  right: 0;
+  background: #333;
+  color: #fff;
+  font-size: 12px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  white-space: nowrap;
+  opacity: 0.95;
+  pointer-events: none;
+}
+
+.pwEntryMeta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 8px;
+  font-size: 12px;
+}
+/* entry 横並び */
+.pwEntryRowGrid{
+  display: grid;
+  grid-template-columns: 160px 1fr 44px;
+  gap: 10px;
+  align-items: start;
+}
+
+.pwEntryTitleInput{
+  width: 100%;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 10px 12px;
+  font-size: 14px;
+  background: #fff;
+}
+
+.pwEntryTextarea{
+  width: 100%;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 10px 12px;
+  font-size: 14px;
+  background: #fff;
+  resize: vertical;
+  min-height: 56px;
+}
+
+.pwEntrySide{
+  position: relative;
+}
+
+.pwEntryCopyBtn{
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+  background: #fff;
+  cursor: pointer;
+}
+
+.pwInlineToast{
+  position: absolute;
+  top: -34px;
+  right: 0;
+  background: rgba(0,0,0,0.78);
+  color: #fff;
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+@media only screen and (max-width: 1080px) {
+  /* ノート編集ページ */
+  .notePassPage .textareaWrap {
+    padding: 10px;
+  }
+  .notePassPage .textareaWrap textarea {
+    font-size: 0.9rem;
+  }
+}
+
+@media only screen and (max-width: 767px) {
+  .notePassPage .itemList .rowTitle {
+    font-size: 0.9rem;
+  }
+  .notePassPage .itemList .listRow .linkLike svg {
+    width: 24px;
+    height: 24px;
+  }
+  .notePassPage .itemList .itemLength {
+    font-size: 0.8rem;
+  }
+  .notePassPage .createInput svg {
+    width: 24px;
+    height: 24px;
+  }
+  /* Note一覧 */
+  .noteRow .noteRowTitle {
+    font-size: 0.9rem;
+    padding-right: 10px;
+  }
+  .noteRow .noteRowPreview {
+    font-size: 0.8rem;
+    padding-right: 10px;
+  }
+  .noteRow .noteRowDate {
+    font-size: 0.7rem;
+  }
+  /* パスワード一覧 */
+  .pwPreviewRow {
+    grid-template-columns: 80px 1fr 34px;
+  }
+  .pwCopyBtn {
+    width: 34px;
+    height: 34px;
+    color: #4FC0C2;
+  }
+  .notePassPage .itemList .listRow .linkLike .pwCopyBtn svg {
+    width: 20px;
+    height: 20px;
+  }
+  .inlineToast {
+    font-size: 11px;
+  }
+  /* ノート編集ページ */
+  .notePassPage .textareaWrap {
+    padding: 0;
+  }
+  .notePassPage .textareaWrap textarea {
+    font-size: 0.85rem;
+    padding: 15px 5px;
+  }
 }

@@ -19,7 +19,11 @@ return [
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => [env('FRONTEND_ORIGIN', 'http://localhost:5173')],
+    // ローカルPCと、スマホ確認用のLAN IPの両方を許可
+    'allowed_origins' => array_filter([
+        env('FRONTEND_ORIGIN', 'http://localhost:5173'),
+        env('FRONTEND_ORIGIN_2', ''),
+    ]),
 
     'allowed_origins_patterns' => [],
 

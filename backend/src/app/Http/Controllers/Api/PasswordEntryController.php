@@ -49,6 +49,18 @@ class PasswordEntryController extends Controller
         return response()->json($entry, 201);
     }
 
+    public function update(Request $request, PasswordEntry $entry)
+    {
+        $data = $request->validate([
+            'title' => ['required', 'string', 'max:255'],
+            'body'  => ['required', 'string'],
+        ]);
+
+        $entry->update($data);
+
+        return response()->json($entry);
+    }
+
     public function destroy(Request $request, PasswordEntry $entry)
     {
         $item = PasswordItem::find($entry->password_item_id);

@@ -67,3 +67,15 @@
   background: #E20000;
   color: #fff;
 }
+
+@media only screen and (max-width: 1080px) {
+  
+}
+
+@media only screen and (max-width: 767px) {
+  .size_md {
+    padding: 10px 15px;
+    font-size: 14px;
+    max-width: 280px
+  }
+}

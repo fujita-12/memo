@@ -80,17 +80,19 @@ export function usePasswordItems({ flash, listId }) {
     }
   };
 
-  // ✅ 一覧の「各行」コピー：bodyだけコピー
+  // 一覧の「各行」コピー：bodyだけコピー
   const copyBody = async (body) => {
     flash.reset();
     const text = body ?? '';
+
     if (!text) {
-      flash.info = 'コピーする内容がありません';
+      flash.ok('コピーする内容がありません');
       return;
     }
+
     try {
       const ok = await copyToClipboard(text);
-      flash.info = ok ? 'コピーしました' : 'コピーできませんでした';
+      flash.ok(ok ? 'コピーしました' : 'コピーできませんでした');
     } catch (e) {
       flash.fail(e, 'コピーに失敗しました');
     }

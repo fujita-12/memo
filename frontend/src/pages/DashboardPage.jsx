@@ -18,20 +18,20 @@ export default function DashboardPage() {
           <Link className={`${styles.linkButtonA} ${styles.colorA} linkLike`} to="/notebooks/create">
             <p>
               <Notebook size={30} />
-                +新規ノートブックを作成
+                +新規ノートブック<br className="sp"/>を作成
             </p>
             <span>+Notebook</span>
           </Link>
           <Link className={`${styles.linkButtonA} ${styles.colorB} linkLike`} to="/password-lists/create">
             <p>
               <KeyRound size={30} />
-                +新規パスワードを作成
+                +新規パスワード<br className="sp"/>を作成
             </p>
             <span>+Password</span>
           </Link>
         </div>
         <hr className={styles.hr} />
-        <div className={`${styles.contentFlex} mt36`}>
+        <div className={`${styles.contentFlex} mt24`}>
           <Link className={`${styles.linkButtonB} ${styles.colorC} linkLike`} to="/notebooks">
             <div className={styles.buttonText}>
               <div className={styles.buttonIcon}>

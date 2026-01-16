@@ -143,6 +143,10 @@ export async function createPasswordList(title) {
   const { data } = await api.post('/api/password-lists', { title });
   return data;
 }
+export async function updatePasswordList(listId, payload) {
+  const { data } = await api.patch(`/api/password-lists/${listId}`, payload);
+  return data;
+}
 export async function deletePasswordList(id) {
   await api.delete(`/api/password-lists/${id}`);
 }
@@ -175,6 +179,11 @@ export async function listPasswordEntries(itemId) {
 }
 export async function createPasswordEntry(itemId, payload) {
   const { data } = await api.post(`/api/password-items/${itemId}/entries`, payload);
+  return data;
+}
+// password entries
+export async function updatePasswordEntry(entryId, payload) {
+  const { data } = await api.patch(`/api/password-entries/${entryId}`, payload);
   return data;
 }
 export async function deletePasswordEntry(entryId) {

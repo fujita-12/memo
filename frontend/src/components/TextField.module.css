@@ -11,3 +11,17 @@
   color: #707070;
   font-size: 14px;
 }
+
+@media only screen and (max-width: 1080px) {
+  
+}
+
+@media only screen and (max-width: 767px) {
+  .input {
+    font-size: 14px;
+    padding: 12px 14px;
+  }
+  .input::placeholder {
+    font-size: 12px;
+  }
+}

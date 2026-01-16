@@ -32,6 +32,19 @@ class PasswordListController extends Controller
         return response()->json($list->only(['id', 'user_id', 'title', 'created_at', 'updated_at']), 201);
     }
 
+    public function update(Request $request, PasswordList $list)
+    {
+        abort_if($list->user_id !== $request->user()->id, 403);
+
+        $validated = $request->validate([
+            'title' => ['required', 'string', 'max:255'],
+        ]);
+
+        $list->update($validated);
+
+        return $list;
+    }
+
     public function destroy(Request $request, PasswordList $list)
     {
         if ($list->user_id !== $request->user()->id) {

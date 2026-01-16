@@ -35,6 +35,7 @@ Route::middleware(['auth:sanctum', 'verified.api'])->group(function () {
 
     Route::get('/password-lists', [PasswordListController::class, 'index']);
     Route::post('/password-lists', [PasswordListController::class, 'store']);
+    Route::patch('/password-lists/{list}', [PasswordListController::class, 'update']);
     Route::delete('/password-lists/{list}', [PasswordListController::class, 'destroy']);
 
     Route::get('/password-lists/{list}/items', [PasswordItemController::class, 'index']);
@@ -46,6 +47,7 @@ Route::middleware(['auth:sanctum', 'verified.api'])->group(function () {
 
     Route::get('/password-items/{item}/entries', [PasswordEntryController::class, 'index']);
     Route::post('/password-items/{item}/entries', [PasswordEntryController::class, 'store']);
+    Route::patch('/password-entries/{entry}', [PasswordEntryController::class, 'update']);
     Route::delete('/password-entries/{entry}', [PasswordEntryController::class, 'destroy']);
 
     Route::put('/password', [PasswordController::class, 'update']);
