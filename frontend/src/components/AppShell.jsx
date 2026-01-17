@@ -73,7 +73,7 @@ export default function AppShell({ info, error, children, showTabs = true }) {
           </div>
         </footer>
       ) : (
-        <div className="copy">Copyright © MemoApp All Rights Reserved.</div>
+        <div className="copy">© MemoApp</div>
       )}
     </div>
   );
