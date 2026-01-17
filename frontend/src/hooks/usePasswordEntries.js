@@ -6,7 +6,7 @@ import {
   deletePasswordEntry,
   getPasswordItem,
   updatePasswordItem,
-  updatePasswordEntry, // ✅ 追加（client.jsに追加する）
+  updatePasswordEntry,
 } from '../api/client';
 import { copyToClipboard } from '../utils/clipboard';
 
@@ -15,8 +15,13 @@ export function usePasswordEntries({ flash, itemId }) {
   const [entries, setEntries] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // ✅ PasswordItemタイトル編集用
+  //  PasswordItemタイトル編集用
   const [itemTitle, setItemTitle] = useState('');
+  const itemTitleRef = useRef(''); //  最新値を保持
+  useEffect(() => {
+    itemTitleRef.current = itemTitle;
+  }, [itemTitle]);
+
   const [itemFieldErrors, setItemFieldErrors] = useState({});
   const [itemSaving, setItemSaving] = useState(false);
   const itemTimerRef = useRef(null);
@@ -32,9 +37,14 @@ export function usePasswordEntries({ flash, itemId }) {
 
   const reqRef = useRef(0);
 
-  // ✅ entries編集用drafts
-  const [drafts, setDrafts] = useState({}); // { [entryId]: { title, body, saving } }
-  const timersRef = useRef(new Map()); // entryId -> timer
+  //  entries編集用drafts
+  const [drafts, setDrafts] = useState({});
+  const draftsRef = useRef({}); //  最新draftを保持
+  useEffect(() => {
+    draftsRef.current = drafts;
+  }, [drafts]);
+
+  const timersRef = useRef(new Map());
 
   useEffect(() => {
     if (!itemId) return;
@@ -55,14 +65,9 @@ export function usePasswordEntries({ flash, itemId }) {
         const sorted = Array.isArray(en) ? [...en].reverse() : [];
         setEntries(sorted);
 
-        // drafts同期
         const next = {};
         for (const e of sorted) {
-          next[e.id] = {
-            title: e.title ?? '',
-            body: e.body ?? '',
-            saving: false,
-          };
+          next[e.id] = { title: e.title ?? '', body: e.body ?? '', saving: false };
         }
         setDrafts(next);
       } catch (e) {
@@ -101,7 +106,7 @@ export function usePasswordEntries({ flash, itemId }) {
     if (itemTimerRef.current) clearTimeout(itemTimerRef.current);
 
     itemTimerRef.current = setTimeout(async () => {
-      await updateItemAction({ title: itemTitle });
+      await updateItemAction({ title: itemTitleRef.current }); // refの最新値を保存
       itemTimerRef.current = null;
     }, 450);
   };
@@ -162,12 +167,11 @@ export function usePasswordEntries({ flash, itemId }) {
   };
 
   // ------------------------
-  // entries update（✅ これがないと保存されない）
+  // entries update
   // ------------------------
   const updateEntryAction = async (entryId, payload) => {
     try {
       const updated = await updatePasswordEntry(entryId, payload);
-      // entries反映
       setEntries((prev) => prev.map((x) => (x.id === entryId ? updated : x)));
       return updated;
     } catch (e) {
@@ -186,12 +190,13 @@ export function usePasswordEntries({ flash, itemId }) {
     }));
   };
 
+  //  即時保存（最新draftは ref から取る）
   const scheduleSave = (entryId) => {
     const old = timersRef.current.get(entryId);
     if (old) clearTimeout(old);
 
     const t = setTimeout(async () => {
-      const d = drafts[entryId];
+      const d = draftsRef.current[entryId]; //  refの最新値
       if (!d) return;
 
       setDrafts((prev) => ({
@@ -216,7 +221,7 @@ export function usePasswordEntries({ flash, itemId }) {
     const old = timersRef.current.get(entryId);
     if (old) clearTimeout(old);
 
-    const d = drafts[entryId];
+    const d = draftsRef.current[entryId]; // refの最新値
     if (!d) return;
 
     setDrafts((prev) => ({
@@ -242,17 +247,23 @@ export function usePasswordEntries({ flash, itemId }) {
     return ok;
   };
 
+  //  どれか1つでも保存中ならtrue
+  const anySaving = itemSaving || Object.values(drafts).some((d) => d?.saving);
+
   return {
     item,
     entries,
     loading,
 
-    // ✅ item title edit
+    // item title edit
     itemTitle,
     setItemTitle,
     itemFieldErrors,
     itemSaving,
     scheduleItemSave,
+
+    // 全体保存中
+    anySaving,
 
     // add modal
     addOpen,

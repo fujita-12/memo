@@ -1,6 +1,6 @@
 // src/pages/PasswordItemPage.jsx
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import AppShell from '../components/AppShell.jsx';
 import PageDefault from '../components/PageDefault.jsx';
@@ -14,20 +14,21 @@ import { useIsMobileTouch } from '../hooks/useIsMobileTouch.js';
 
 import { useFlash } from '../hooks/useFlash.js';
 import { usePasswordEntries } from '../hooks/usePasswordEntries.js';
+import { listPasswordLists } from '../api/client';
 
 import {
   KeyRound,
   FilePlusCorner,
   MoreHorizontal,
   Trash2,
+  Undo2,
   ClipboardCopy,
   FileText,
-  Undo2,
 } from 'lucide-react';
 
 import '../styles/note-pass.css';
 
-// 下からスライドするメニュー（簡易 BottomSheet）
+// BottomSheet
 function BottomSheet({ open, title, onClose, children }) {
   useEffect(() => {
     if (!open) return;
@@ -67,18 +68,40 @@ export default function PasswordItemPage() {
   const nav = useNavigate();
   const location = useLocation();
 
-  // 一覧 → 詳細へ遷移するときに state で受け取れる場合は使う
-  const listTitle = location.state?.listTitle || '';
+  // 一覧→詳細のstate（あれば最優先）
+  const passedListTitle =
+    typeof location.state?.listTitle === 'string' ? location.state.listTitle : '';
+
+  // APIで補完する用のstate
+  const [fetchedListTitle, setFetchedListTitle] = useState('');
+
+  // 表示するタイトルは「state優先、無ければAPI」
+  const listTitle = passedListTitle?.trim() ? passedListTitle : fetchedListTitle;
+
+  useEffect(() => {
+    // stateで渡ってきてるならAPI取りに行かない
+    if (passedListTitle?.trim()) return;
+    if (!listId) return;
+
+    (async () => {
+      try {
+        const lists = await listPasswordLists();
+        const found = lists.find((x) => String(x.id) === String(listId));
+        setFetchedListTitle(found?.title || '');
+      } catch {
+        setFetchedListTitle('');
+      }
+    })();
+  }, [listId, passedListTitle]);
 
   const flash = useFlash();
   const pe = usePasswordEntries({ flash, itemId });
 
   const isMobileTouch = useIsMobileTouch();
 
-  // ✅ SP：スワイプで開いてるRow
+  // SP：スワイプで開いてるRow
   const [openRowId, setOpenRowId] = useState(null);
 
-  // 開いた状態で縦スクロールしたら閉じる
   useEffect(() => {
     if (!openRowId) return;
     const onScroll = () => setOpenRowId(null);
@@ -86,15 +109,14 @@ export default function PasswordItemPage() {
     return () => window.removeEventListener('scroll', onScroll);
   }, [openRowId]);
 
-  // ✅ PC：…押したらBottomSheet（削除だけ）
+  // PC：…押したらBottomSheet
   const [sheetOpen, setSheetOpen] = useState(false);
-  const [target, setTarget] = useState(null); // {id,title}
+  const [target, setTarget] = useState(null);
 
   const openSheet = (entry) => {
     setTarget({ id: entry.id, title: entry.title });
     setSheetOpen(true);
   };
-
   const closeSheet = () => {
     setSheetOpen(false);
     setTarget(null);
@@ -108,13 +130,12 @@ export default function PasswordItemPage() {
     closeSheet();
   };
 
-  // ✅ コピー用：小さな吹き出しを3秒だけ出す（entryIdごと）
+  // コピーtoast（3秒）
   const [toastEntryId, setToastEntryId] = useState(null);
   const toastTimerRef = useRef(null);
 
   const showInlineToast = (entryId) => {
     setToastEntryId(entryId);
-
     if (toastTimerRef.current) clearTimeout(toastTimerRef.current);
     toastTimerRef.current = setTimeout(() => {
       setToastEntryId(null);
@@ -128,8 +149,40 @@ export default function PasswordItemPage() {
     };
   }, []);
 
-  // ✅ PasswordItemのタイトル（編集対象）
-  const itemTitle = useMemo(() => pe.item?.title ?? '', [pe.item]);
+  // 保存完了メッセージ（0.8秒だけ表示）
+  const [savedMsg, setSavedMsg] = useState('');
+  const [savedKey, setSavedKey] = useState(0);
+  const savedTimerRef = useRef(null);
+  const prevSavingRef = useRef(false);
+
+  useEffect(() => {
+  if (pe.loading) return;
+
+  const prev = prevSavingRef.current;
+  const now = pe.anySaving;
+
+  // 「保存中 → 保存完了」に変わった瞬間だけ発火
+  if (prev === true && now === false) {
+    queueMicrotask(() => {
+      setSavedKey((k) => k + 1);
+      setSavedMsg('保存しました');
+    });
+
+    if (savedTimerRef.current) clearTimeout(savedTimerRef.current);
+    savedTimerRef.current = setTimeout(() => {
+        setSavedMsg('');
+        savedTimerRef.current = null;
+      }, 800);
+    }
+
+    prevSavingRef.current = now;
+  }, [pe.anySaving, pe.loading]);
+
+  useEffect(() => {
+    return () => {
+      if (savedTimerRef.current) clearTimeout(savedTimerRef.current);
+    };
+  }, []);
 
   return (
     <AppShell info={''} error={''}>
@@ -138,16 +191,25 @@ export default function PasswordItemPage() {
         <div className="itemnameFlex">
           <div className="itemname">
             <KeyRound size={14} />
-            {/* ✅ ここは「PasswordListのタイトル」にしたい */}
-            <span>{listTitle ? listTitle : '...'}</span>
+            <span>{listTitle?.trim() ? listTitle : '...'}</span>
           </div>
 
           <div className="small muted">
-            {pe.loading ? 'Loading...' : pe.itemSaving ? '保存中…' : ''}
+            {pe.loading ? (
+              'Loading...'
+            ) : pe.anySaving ? (
+              '保存中…'
+            ) : savedMsg ? (
+              <span key={savedKey} className="saveDoneBubble">
+                保存しました
+              </span>
+            ) : (
+              ''
+            )}
           </div>
         </div>
 
-        {/* ✅ PasswordItemタイトル編集（Noteと同じ感じ） */}
+        {/* PasswordItemタイトル編集 */}
         <div className="createInput">
           <FileText size={30} />
           <TextField
@@ -172,13 +234,15 @@ export default function PasswordItemPage() {
         ) : (
           <div className="pwEntryList mt12">
             {pe.entries.map((e) => {
-              const d = pe.drafts[e.id] || { title: e.title ?? '', body: e.body ?? '', saving: false };
+              const d = pe.drafts[e.id] || {
+                title: e.title ?? '',
+                body: e.body ?? '',
+                saving: false,
+              };
 
               const EntryFront = (
                 <div className="pwEntryFront">
-                  {/* ✅ 横並び：タイトル | 本文 | copy */}
                   <div className="pwEntryRowGrid">
-                    {/* 左：タイトル */}
                     <input
                       className="pwEntryTitleInput"
                       value={d.title}
@@ -191,7 +255,6 @@ export default function PasswordItemPage() {
                       disabled={pe.deletingId === e.id}
                     />
 
-                    {/* 中：本文 */}
                     <textarea
                       className="pwEntryTextarea"
                       value={d.body}
@@ -205,7 +268,6 @@ export default function PasswordItemPage() {
                       disabled={pe.deletingId === e.id}
                     />
 
-                    {/* 右：コピー */}
                     <div className="pwEntrySide">
                       <button
                         type="button"
@@ -227,7 +289,6 @@ export default function PasswordItemPage() {
                     </div>
                   </div>
 
-                  {/* PCだけ… */}
                   {!isMobileTouch && (
                     <div className="pwEntryMoreLine">
                       <button
@@ -240,14 +301,10 @@ export default function PasswordItemPage() {
                       </button>
                     </div>
                   )}
-
-                  <div className="pwEntryMeta">
-                    {d.saving ? <span className="muted">保存中…</span> : <span className="muted"> </span>}
-                  </div>
                 </div>
               );
 
-              // ✅ PC：Swipeなし
+              // PC
               if (!isMobileTouch) {
                 return (
                   <div key={e.id} className="pwEntryRow">
@@ -256,7 +313,7 @@ export default function PasswordItemPage() {
                 );
               }
 
-              // ✅ SP：Swipeで削除
+              // SP：スワイプ削除
               return (
                 <div key={e.id} className="pwEntryRow">
                   <SwipeRow
@@ -269,16 +326,14 @@ export default function PasswordItemPage() {
                         <button
                           type="button"
                           className="backBtn backDelete"
+                          onPointerDown={(ev) => ev.stopPropagation()}
                           onClick={async (ev) => {
                             ev.preventDefault();
-                            ev.stopPropagation(); // ✅ これ重要（反応しない対策）
+                            ev.stopPropagation();
                             const ok = confirm('この詳細を削除しますか？');
                             if (!ok) return;
                             await pe.deleteAction(e.id, { confirmed: true });
                             setOpenRowId(null);
-                          }}
-                          onPointerDown={(ev) => {
-                            ev.stopPropagation(); // ✅ SwipeRowにイベント取られないように
                           }}
                           disabled={pe.deletingId === e.id}
                           aria-label="削除"
@@ -301,8 +356,7 @@ export default function PasswordItemPage() {
               );
             })}
 
-            {/* 戻るボタン */}
-            <div className="mt12">
+            {/* <div className="mt12">
               <Button
                 onClick={() => nav(`/password-lists/${listId}`, { replace: true })}
                 variant="black"
@@ -311,26 +365,29 @@ export default function PasswordItemPage() {
               >
                 一覧へ戻る
               </Button>
-            </div>
+            </div> */}
           </div>
         )}
 
-        {/* 右下＋（見た目はNotebooksと同じ / モーダル発火） */}
+        {/* 右下＋隣の戻るボタン */}
+        <FooterPlusButton onClick={() => nav(`/password-lists/${listId}`, { replace: true })} variant="back" position="left">
+          <Undo2 size={20} />
+        </FooterPlusButton>
+
+        {/* 右下＋ */}
         <FooterPlusButton onClick={pe.openAdd} ariaLabel="詳細を追加">
           <FilePlusCorner size={20} />
         </FooterPlusButton>
       </PageDefault>
 
-      {/* Swipe開いてる時、背景タップで閉じる */}
-      {openRowId && (
+      {/* {openRowId && (
         <div
           className="swipeDismissOverlay"
           onClick={() => setOpenRowId(null)}
           aria-hidden="true"
         />
-      )}
+      )} */}
 
-      {/* PC：BottomSheet（削除のみ） */}
       <BottomSheet open={sheetOpen} title="詳細メニュー" onClose={closeSheet}>
         <div className="sheetBtns">
           <button type="button" className="sheetBtn danger" onClick={doDeleteFromSheet}>

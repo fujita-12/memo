@@ -13,9 +13,15 @@ export default function Button({
   type = 'button',
   to,
   className = '',
+  variant = 'plus', //'plus' | 'back'
+  position = 'right', //'right' | 'left'
 }) {
   const classes = cx(
     styles.bottomBtn,
+    disabled && styles.disabled,
+    variant === 'back' && styles.backBtn,
+    position === 'left' && styles.left,
+    position === 'right' && styles.right,
     disabled && styles.disabled,
     className
   );

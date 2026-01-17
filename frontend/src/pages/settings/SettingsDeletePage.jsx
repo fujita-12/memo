@@ -1,5 +1,4 @@
 import AppShell from '../../components/AppShell.jsx';
-import Section from '../../components/Section.jsx';
 import TextField from '../../components/TextField.jsx';
 import Button from '../../components/Button.jsx';
 
@@ -23,9 +22,11 @@ export default function SettingsDeletePage({ onLoggedOut }) {
 
   return (
     <AppShell info={flash.info} error={flash.error}>
-      <Section title="退会（アカウント削除）">
-        <p className="small">確認のため現在のパスワードを入力してください。</p>
-
+      <div className={`default-box-bg`}>
+        <h2>退会（アカウント削除）</h2>
+        <p className="small">
+          確認のため現在のパスワードを入力してください。
+        </p>
         <table className="main-table">
           <tbody>
             <tr>
@@ -44,8 +45,8 @@ export default function SettingsDeletePage({ onLoggedOut }) {
               </td>
             </tr>
           </tbody>
-        </table>
-        <div className="mt24">
+        </table> 
+        <div className="mt36">
           <Button
             onClick={() => {
               const ok = confirm('本当に退会しますか？ノート/ノートブックも全て削除されます。');
@@ -60,7 +61,7 @@ export default function SettingsDeletePage({ onLoggedOut }) {
             {del.loadingDelete ? '...' : '退会する'}
           </Button>
         </div>
-      </Section>
+      </div>
     </AppShell>
   );
 }

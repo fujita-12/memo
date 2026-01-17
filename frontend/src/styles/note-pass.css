@@ -716,9 +716,8 @@
 
 .pwEntryFront {
   background: #fff;
-  border: 1px solid #e5e7eb;
-  border-radius: 14px;
-  padding: 12px 12px 10px;
+  display: grid;
+  grid-template-columns: 1fr 44px;
 }
 
 .pwEntrySwipeFront {
@@ -749,6 +748,10 @@
   background: transparent;
   padding: 4px 0;
 }
+.pwEntryTitleInput:focus-visible {
+  outline: none;
+  border-bottom: 1px solid #4FC0C2;
+} 
 
 .pwEntryBodyRow {
   display: grid;
@@ -758,26 +761,18 @@
   align-items: start;
 }
 
-.pwEntryTextarea {
-  width: 100%;
-  border: 1px solid #e5e7eb;
-  border-radius: 12px;
-  padding: 10px 12px;
-  outline: none;
-  resize: vertical;
-  min-height: 56px;
-  font-size: 14px;
-  line-height: 1.45;
-}
-
 .pwEntryTextarea:focus-visible {
-  border-color: #4FC0C2;
+  outline: none;
+  border-bottom: 1px solid #4FC0C2;
 }
 
 .pwEntrySide {
   position: relative;
   display: grid;
   place-items: start;
+}
+.pwEntrySide svg {
+  color: #4FC0C2;
 }
 
 .pwEntryCopyBtn {
@@ -817,27 +812,28 @@
   display: grid;
   grid-template-columns: 160px 1fr 44px;
   gap: 10px;
-  align-items: start;
+  align-items: center;
 }
 
 .pwEntryTitleInput{
   width: 100%;
-  border: 1px solid #e5e7eb;
-  border-radius: 12px;
-  padding: 10px 12px;
+  border-bottom: 1px solid #e5e7eb;
+  padding: 10px;
   font-size: 14px;
   background: #fff;
 }
 
 .pwEntryTextarea{
   width: 100%;
-  border: 1px solid #e5e7eb;
-  border-radius: 12px;
-  padding: 10px 12px;
+  border: none;
+  border-bottom: 1px solid #e5e7eb;
+  border-radius: 0;
+  padding: 10px;
   font-size: 14px;
   background: #fff;
   resize: vertical;
-  min-height: 56px;
+  min-height: unset;
+  height: 38px;
 }
 
 .pwEntrySide{
@@ -855,14 +851,39 @@
 
 .pwInlineToast{
   position: absolute;
-  top: -34px;
+  top: -30px;
   right: 0;
-  background: rgba(0,0,0,0.78);
+  background: #4FC0C2;
   color: #fff;
-  padding: 6px 10px;
-  border-radius: 999px;
-  font-size: 12px;
+  padding: 3px 10px;
+  border-radius: 5px;
+  font-size: 11px;
   white-space: nowrap;
+}
+
+/* 保存しました（ふわっと出て消える） */
+.saveDoneBubble {
+  display: inline-block;
+  animation: saveDoneFade 0.8s ease forwards;
+  transform-origin: center;
+}
+
+@keyframes saveDoneFade {
+  0% {
+    opacity: 0;
+    transform: translateY(1px);
+  }
+  15% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  80% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-1px);
+  }
 }
 
 @media only screen and (max-width: 1080px) {
@@ -925,5 +946,26 @@
   .notePassPage .textareaWrap textarea {
     font-size: 0.85rem;
     padding: 15px 5px;
+  }
+  /* パスワード詳細ページ */
+  .pwEntryFront {
+    grid-template-columns: 1fr 0;
+  }
+  .pwEntryRowGrid {
+    grid-template-columns: 90px 1fr 44px;
+  }
+  .pwEntryTitleInput {
+    padding: 13px 5px;
+    font-size: 13px;
+    height: 44px;
+  }
+  .pwEntryTextarea {
+    padding: 13px 5px;
+    font-size: 13px;
+    height: 44px;
+  }
+  .pwInlineToast{
+    top: 0px;
+    right: 48px;
   }
 }

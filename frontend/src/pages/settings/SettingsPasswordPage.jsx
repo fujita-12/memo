@@ -1,5 +1,4 @@
 import AppShell from '../../components/AppShell.jsx';
-import Section from '../../components/Section.jsx';
 import TextField from '../../components/TextField.jsx';
 import Button from '../../components/Button.jsx';
 
@@ -12,8 +11,8 @@ export default function SettingsPasswordPage() {
 
   return (
     <AppShell info={flash.info} error={flash.error}>
-      <Section title="パスワード変更">
-
+      <div className={`default-box-bg`}>
+        <h2>パスワード変更</h2>
         <table className="main-table">
           <tbody>
             <tr>
@@ -62,13 +61,14 @@ export default function SettingsPasswordPage() {
               </td>
             </tr>
           </tbody>
-        </table>        
-        <div className="mt24">
+        </table> 
+
+        <div className="mt36">
           <Button onClick={pw.changePasswordAction} disabled={pw.loadingPw} variant="primary" size="md" align="center">
             {pw.loadingPw ? '...' : '変更する'}
           </Button>
         </div>
-      </Section>
+      </div>
     </AppShell>
   );
 }

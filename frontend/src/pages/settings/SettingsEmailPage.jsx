@@ -1,7 +1,6 @@
 import { useCallback } from 'react';
 
 import AppShell from '../../components/AppShell.jsx';
-import Section from '../../components/Section.jsx';
 import TextField from '../../components/TextField.jsx';
 import Button from '../../components/Button.jsx';
 
@@ -21,19 +20,16 @@ export default function SettingsEmailPage({ user, onUserUpdated }) {
 
   return (
     <AppShell info={flash.info} error={flash.error}>
-      <p>ログイン中: {user.email}</p>
-
-      <Section title="メール変更（旧メール承認 → 新メール確定）">
+      <div className={`default-box-bg`}>
+        <h2>メールアドレス変更</h2>
         <p className="small">
           旧メールに「承認/拒否リンク」を送ります。承認後に新メールへ確定リンクが届きます。
         </p>
-
         {user.pending_email && (
           <p className="small">
             変更待ち: <b>{user.pending_email}</b>（旧メールの承認が必要）
           </p>
         )}
-
         <table className="main-table">
           <tbody>
             <tr>
@@ -54,8 +50,8 @@ export default function SettingsEmailPage({ user, onUserUpdated }) {
               <th>パスワード</th>
               <td>
                 <TextField
-                  placeholder="current password"
-                  type="パスワードを入力してください"
+                  placeholder="パスワードを入力してください"
+                  type="password"
                   value={email.emailChangePw}
                   onChange={email.setEmailChangePw}
                   readOnly={email.loadingEmail}
@@ -67,7 +63,8 @@ export default function SettingsEmailPage({ user, onUserUpdated }) {
             </tr>
           </tbody>
         </table> 
-        <div className="mt24 row">
+
+        <div className="mt36">
           <Button
             onClick={email.requestEmailChangeAction}
             disabled={email.loadingEmail || !email.newEmail || !email.emailChangePw}
@@ -78,7 +75,7 @@ export default function SettingsEmailPage({ user, onUserUpdated }) {
             {email.loadingEmail ? '...' : '承認/拒否リンクを送る'}
           </Button>
         </div>
-      </Section>
+      </div>
     </AppShell>
   );
 }

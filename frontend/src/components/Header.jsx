@@ -2,6 +2,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useLogoutAction } from '../hooks/useLogoutAction';
+import { Settings, LogOut } from 'lucide-react';
 import styles from './Header.module.css';
 
 export default function Header({ user, onLoggedOut }) {
@@ -54,7 +55,8 @@ export default function Header({ user, onLoggedOut }) {
                 <div role="menu" className={styles.dropdown}>
                   <div className={styles.dropdownHeader}>
                     <div className={styles.dropdownLabel}>Signed in as</div>
-                    <div className={styles.dropdownEmail}>{user.email}</div>          
+                    <div className={styles.dropdownName}>{user.name}</div>
+                    <div className={styles.dropdownEmail}>{user.email}</div>       
                   </div>
                   <Link
                     to="/settings"
@@ -62,6 +64,7 @@ export default function Header({ user, onLoggedOut }) {
                     onClick={() => setOpen(false)}
                     className={styles.menuButton}
                   >
+                    <Settings size={18} />
                     アカウント設定
                   </Link>
                   <button
@@ -76,6 +79,7 @@ export default function Header({ user, onLoggedOut }) {
                       loadingLogout ? styles.menuButtonDisabled : '',
                     ].join(' ')}
                   >
+                    <LogOut size={18} />
                     {loadingLogout ? '...' : 'ログアウト'}
                   </button>
                 </div>

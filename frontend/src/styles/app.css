@@ -38,6 +38,7 @@
   margin-bottom: 12px;
   display: grid;
   gap: 8px;
+  padding: 0 20px;
 }
 
 .flashOk,
