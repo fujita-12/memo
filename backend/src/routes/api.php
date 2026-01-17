@@ -4,7 +4,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\NotebookController;
 use App\Http\Controllers\Api\NoteController;
+use App\Http\Controllers\Api\PasswordListController;
+use App\Http\Controllers\Api\PasswordItemController;
 use App\Http\Controllers\Api\PasswordController;
+use App\Http\Controllers\Api\PasswordEntryController;
 use App\Http\Controllers\Api\AccountController;
 use App\Http\Controllers\Auth\VerifyEmailController;
 
@@ -29,6 +32,23 @@ Route::middleware(['auth:sanctum', 'verified.api'])->group(function () {
     Route::get('notes/{note}', [NoteController::class, 'show']);
     Route::patch('notes/{note}', [NoteController::class, 'update']);
     Route::delete('notes/{note}', [NoteController::class, 'destroy']);
+
+    Route::get('/password-lists', [PasswordListController::class, 'index']);
+    Route::post('/password-lists', [PasswordListController::class, 'store']);
+    Route::patch('/password-lists/{list}', [PasswordListController::class, 'update']);
+    Route::delete('/password-lists/{list}', [PasswordListController::class, 'destroy']);
+
+    Route::get('/password-lists/{list}/items', [PasswordItemController::class, 'index']);
+    Route::post('/password-lists/{list}/items', [PasswordItemController::class, 'store']);
+
+    Route::get('/password-items/{item}', [PasswordItemController::class, 'show']);
+    Route::patch('/password-items/{item}', [PasswordItemController::class, 'update']);
+    Route::delete('/password-items/{item}', [PasswordItemController::class, 'destroy']);
+
+    Route::get('/password-items/{item}/entries', [PasswordEntryController::class, 'index']);
+    Route::post('/password-items/{item}/entries', [PasswordEntryController::class, 'store']);
+    Route::patch('/password-entries/{entry}', [PasswordEntryController::class, 'update']);
+    Route::delete('/password-entries/{entry}', [PasswordEntryController::class, 'destroy']);
 
     Route::put('/password', [PasswordController::class, 'update']);
 });

@@ -70,18 +70,18 @@ export default function VerifyNoticePage({ user, onLoggedOut, onUserUpdated }) {
   const disabledAny = loadingResend || loadingRefresh || loadingLogout || del.loadingDelete;
 
   return (
-    <AppShell info={flash.info} error={flash.error}>
+    <AppShell info={flash.info} error={flash.error} showTabs={false}>
       <p>ログイン中: {user.email}</p>
 
       <Section title="メール認証が未完了です">
         <p className="small">届いたメールのリンクを開いてください。</p>
 
         <div className="row mt12">
-          <Button onClick={handleResend} disabled={disabledAny}>
+          <Button onClick={handleResend} disabled={disabledAny} variant="primary" size="md" align="center">
             {loadingResend ? '...' : '認証メールを再送'}
           </Button>
 
-          <Button onClick={handleRefresh} disabled={disabledAny}>
+          <Button onClick={handleRefresh} disabled={disabledAny} variant="black" size="md" align="center">
             {loadingRefresh ? '...' : '認証状態を更新'}
           </Button>
         </div>
@@ -107,6 +107,9 @@ export default function VerifyNoticePage({ user, onLoggedOut, onUserUpdated }) {
               del.deleteAccountAction({ confirmed: true });
             }}
             disabled={del.loadingDelete || !del.deletePw}
+            variant="danger" 
+            size="md" 
+            align="center"
           >
             {del.loadingDelete ? '...' : '退会する'}
           </Button>
@@ -114,7 +117,7 @@ export default function VerifyNoticePage({ user, onLoggedOut, onUserUpdated }) {
       </Section>
 
       <div className="mt16">
-        <Button onClick={logoutAction} disabled={loadingLogout || disabledAny}>
+        <Button onClick={logoutAction} disabled={loadingLogout || disabledAny} variant="black" size="md" align="center">
           {loadingLogout ? '...' : 'Logout'}
         </Button>
       </div>

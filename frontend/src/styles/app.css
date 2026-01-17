@@ -1,38 +1,34 @@
+* {
+  box-sizing: border-box;
+}
 /* ===== Layout ===== */
 .app {
-  min-height: 100vh;
+  min-height: calc(100vh - 60px);
   display: flex;
   flex-direction: column;
 }
-
 .appHeader {
   border-bottom: 1px solid #e5e7eb;
   background: #fff;
 }
-
 .appHeaderInner,
 .appMainInner,
 .appFooterInner {
   max-width: 860px;
   margin: 0 auto;
-  padding: 16px;
+  padding: 16px 16px 50px;
 }
-
 .appTitle {
   margin: 0;
   font-size: 20px;
 }
-
 .appMain {
   flex: 1;
   background: #fafafa;
 }
-
 .appFooter {
-  border-top: 1px solid #e5e7eb;
   background: #fff;
 }
-
 .muted {
   color: #6b7280;
 }
@@ -42,6 +38,7 @@
   margin-bottom: 12px;
   display: grid;
   gap: 8px;
+  padding: 0 20px;
 }
 
 .flashOk,
@@ -57,12 +54,14 @@
   background: #ecfdf5;
   border: 1px solid #a7f3d0;
   color: #065f46;
+  margin-top: 10px;
 }
 
 .flashErr {
   background: #fef2f2;
   border: 1px solid #fecaca;
   color: #991b1b;
+  margin-top: 10px;
 }
 
 /* ===== Utility ===== */
@@ -85,18 +84,226 @@
   margin-top: 24px;
 }
 
+.mt36 {
+  margin-top: 36px;
+}
+
 .small {
   font-size: 13px;
   color: #374151;
 }
-.password-text {
+
+/* 非活性時 */
+.isDisabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.pwPreview {
+  margin-top: 6px;
+  font-size: 13px;
+  line-height: 1.5;
+  color: #374151;
+  white-space: pre-wrap;
+
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.pwEntryCard {
+  background: transparent;
+}
+
+/* ===== Tab Bar (Footer fixed) ===== */
+.appTabBar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 50;
+  background: #FAFAFA;
+}
+
+/* 中身の横幅は既存 appFooterInner を使う */
+.appTabBarInner {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+/* タブ1個 */
+.tabItem {
+  display: grid;
+  justify-items: center;
+  align-content: center;
+  gap: 4px;
+
+  text-decoration: none;
+  color: #6b7280;
+
+  padding: 8px 6px;
+  border-radius: 12px;
+  transition: 0.15s;
+}
+
+.tabItem:hover {
+  background: #f3f4f6;
+  color: #111827;
+}
+
+.tabIcon {
+  line-height: 0;
+}
+
+.tabLabel {
+  font-size: 12px;
+}
+
+/* active */
+.tabItem.isActive {
+  color: #111827;
+  font-weight: 700;
+  background: #eef2ff;
+}
+
+/* ===== main側にフッター分の余白を確保 ===== */
+/* タブバー高さ(だいたい64px前後) + 余裕 */
+.appMain {
+  padding-bottom: 86px;
+}
+/* showTabs=false のときは下余白いらない */
+.noTabs .appMain {
+  padding-bottom: 0;
+}
+
+/* iPhoneの下部安全領域対策（効く環境だけ） */
+.appTabBar {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+.tabPage .appMain {
+  background-color: #fff;
+}
+
+/* コピーライト */
+.copy {
+  text-align: center;
+  font-size: 12px;
+  color: #fff;
+  padding: 12px;
+  background-color: #6b7280;
+}
+
+/* ログイン前の共通スタイル */
+.default-box-bg {
+  background-color: #fff;
+  border-radius: 20px;
+  padding: 32px 80px 50px;
+  margin-top: 30px;
+}
+.default-box-bg h2 {
+  text-align: center;
+  margin: 0 0 30px;
+  font-size: 1.6rem;
+}
+.main-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.main-table th {
+  text-align: left;
+  padding: 14px 16px 14px 0;
+  width: 25%;
+  min-width: 120px;
+  vertical-align: middle;
+  box-sizing: border-box;
+}
+.main-table td {
+  padding: 14px 0 14px 16px;
+  box-sizing: border-box;
+}
+.default-box-bg .password-text {
   text-align: right;
   font-size: 0.8rem;
-  margin: 5px 0 10px;
+  margin: 0;
   transition: .3s;
   cursor: pointer;
-  max-width: 520px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 5px;
 }
-.password-text:hover {
-  color: #991b1b;
+.default-box-bg .password-text:hover {
+  color: #E20000;
+}
+.default-box-bg hr {
+  margin: 36px 0;
+  border: none;
+  border-top: 1px solid #DDDDDD;
+}
+
+/* ログイン後共通タイトルエリア */
+.page-default .titleArea {
+  text-align: center;
+}
+.page-default .titleArea h1 {
+  margin: 0;
+  font-size: 1.8rem;
+  font-weight: 500;
+  color: #4FC0C2;
+}
+.page-default .titleArea .date {
+  margin-top: 5px;
+  font-size: 0.8rem;
+  color: #707070;
+}
+
+@media only screen and (max-width: 1080px) {
+  
+}
+
+@media only screen and (max-width: 767px) {
+  .app {
+    min-height: calc(100vh - 120px);
+  }
+  .app.tabPage {
+    min-height: calc(100vh - 193px);
+  }
+  .appMainInner {
+    padding: 16px 16px 30px;
+  }
+  .default-box-bg {
+    border-radius: 10px;
+    padding: 24px 20px 30px;
+    margin-top: 20px;
+  }
+  .default-box-bg h2 {
+    margin: 0 0 20px;
+    font-size: 1.4rem;
+  }
+  .default-box-bg hr {
+    margin: 18px 0;
+  }
+  .main-table th {
+    padding: 10px 0 0;
+    width: 100%;
+    display: block;
+    font-size: 0.9rem;
+  }
+  .main-table td {
+    padding: 5px 0 10px;
+    width: 100%;
+    display: block;
+  }
+
+  /* フッタータブ */
+  .tabLabel {
+    font-size: 11px;
+  }
+  .tabIcon svg {
+    width: 20px;
+    height: 20px;
+  }
 }

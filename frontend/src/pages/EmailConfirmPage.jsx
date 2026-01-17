@@ -28,7 +28,7 @@ export default function EmailConfirmPage() {
   const goAuthWithFlash = (message) => {
     setFlashInfo(message);
     if (email) setFlashEmail(email);
-    navigate('/auth', { replace: true }); // ✅ token付きURLを消して /auth へ
+    navigate('/auth', { replace: true }); //  token付きURLを消して /auth へ
   };
 
   const handleConfirm = async () => {
@@ -40,7 +40,7 @@ export default function EmailConfirmPage() {
     try {
       const res = await confirmEmailChange({ token, email });
 
-      // ✅ 成功（確定）
+      //  成功（確定）
       if (res.status === 'confirmed') {
         // セッションを切って「新メールで再ログイン」運用にする
         await logout().catch(() => {});
@@ -48,7 +48,7 @@ export default function EmailConfirmPage() {
         return;
       }
 
-      // ✅ すでに確定済み（同じリンクを踏んだ等）
+      //  すでに確定済み（同じリンクを踏んだ等）
       if (res.status === 'already_completed' && res.completion_status === 'confirmed') {
         await logout().catch(() => {});
         goAuthWithFlash('メールアドレスはすでに変更済みです。新しいメールアドレスでログインしてください。');
@@ -89,7 +89,7 @@ export default function EmailConfirmPage() {
   };
 
   return (
-    <AppShell info={info} error={error}>
+    <AppShell info={info} error={error} showTabs={false}>
       <h2>メールアドレス変更の確定（新メール）</h2>
 
       {!token ? (
@@ -102,12 +102,13 @@ export default function EmailConfirmPage() {
             変更先: <b>{email || '(email未指定)'}</b>
           </p>
 
-          <div className="row mt12">
-            <Button onClick={handleConfirm} disabled={loading}>
+          <div className="mt24">
+            <Button onClick={handleConfirm} disabled={loading} variant="primary" size="md" align="center">
               {loading ? '...' : '確定する'}
             </Button>
-
-            <Button onClick={() => navigate('/login', { replace: true })} disabled={loading}>
+          </div>
+          <div className="mt24">
+            <Button onClick={() => navigate('/login', { replace: true })} disabled={loading} variant="black" size="md" align="center">
               Loginへ戻る
             </Button>
           </div>

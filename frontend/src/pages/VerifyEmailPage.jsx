@@ -40,7 +40,7 @@ export default function VerifyEmailPage({ onUserUpdated }) {
   }, [url, navigate, onUserUpdated]);
 
   return (
-    <AppShell info={info} error={error}>
+    <AppShell info={info} error={error} showTabs={false}>
       {info && <p>{info}</p>}
       {error && <p>{error}</p>}
     </AppShell>

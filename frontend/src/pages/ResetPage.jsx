@@ -14,7 +14,7 @@ export default function ResetPage() {
   const navigate = useNavigate();
   const [params] = useSearchParams();
 
-  // ✅ クエリから読む（/reset?token=...&email=...）
+  // クエリから読む（/reset?token=...&email=...）
   const token = useMemo(() => params.get('token') || '', [params]);
   const email = useMemo(() => params.get('email') || '', [params]);
 
@@ -45,11 +45,11 @@ export default function ResetPage() {
         password_confirmation: passwordConfirmation,
       });
 
-      // ✅ 次画面で表示したいメッセージを積む（/auth→/loginへ流れる）
+      // 次画面で表示したいメッセージを積む（/auth→/loginへ流れる）
       setFlashInfo('パスワードを更新しました。ログインしてください。');
       if (email) setFlashEmail(email);
 
-      // ✅ /auth に寄せる（AuthPage が /login へ state 渡す）
+      // /auth に寄せる（AuthPage が /login へ state 渡す）
       navigate('/auth', { replace: true });
     } catch (e) {
       const { message, fieldErrors } = pickLaravelErrors(e);
@@ -62,47 +62,64 @@ export default function ResetPage() {
 
   return (
     <AppShell info={info} error={error}>
-      <h2>Reset Password</h2>
-
-      {!token ? (
-        <p className="flashErr">リセット用リンクから開いてください（token が見つかりません）。</p>
-      ) : (
-        <>
-          <TextField value={email} readOnly />
-          <div className="mt8" />
-
-          <TextField
-            placeholder="new password"
-            type="password"
-            value={password}
-            onChange={setPassword}
-            readOnly={loading}
-          />
-          {fieldErrors.password && <p className="flashErr">{fieldErrors.password[0]}</p>}
-
-          <div className="mt8" />
-          <TextField
-            placeholder="password confirmation"
-            type="password"
-            value={passwordConfirmation}
-            onChange={setPasswordConfirmation}
-            readOnly={loading}
-          />
-          {fieldErrors.password_confirmation && (
-            <p className="flashErr">{fieldErrors.password_confirmation[0]}</p>
-          )}
-
-          <div className="mt12 row">
-            <Button onClick={handleReset} disabled={loading || !token}>
-              {loading ? '...' : 'パスワードを更新'}
-            </Button>
-
-            <Button onClick={() => navigate('/login')} disabled={loading}>
-              Loginへ戻る
-            </Button>
-          </div>
-        </>
-      )}
+      <div className="default-box-bg">
+        <h2>パスワード再設定</h2>
+        {!token ? (
+          <p className="flashErr">リセット用リンクから開いてください（token が見つかりません）。</p>
+        ) : (
+          <>
+            <table className="main-table">
+              <tbody>
+                <tr>
+                  <th>メールアドレス</th>
+                  <td>
+                    <TextField value={email} readOnly />
+                  </td>
+                </tr>
+                <tr>
+                  <th>新しいパスワード</th>
+                  <td>
+                    <TextField
+                      placeholder="new password"
+                      type="password"
+                      value={password}
+                      onChange={setPassword}
+                      readOnly={loading}
+                    />
+                    {fieldErrors.password && <p className="flashErr">{fieldErrors.password[0]}</p>}
+                  </td>
+                </tr>
+                <tr>
+                  <th>パスワード（確認）</th>
+                  <td>
+                    <TextField
+                      placeholder="password confirmation"
+                      type="password"
+                      value={passwordConfirmation}
+                      onChange={setPasswordConfirmation}
+                      readOnly={loading}
+                    />
+                    {fieldErrors.password_confirmation && (
+                      <p className="flashErr">{fieldErrors.password_confirmation[0]}</p>
+                    )}
+                  </td>
+                </tr>
+              </tbody>
+            </table>    
+            <div className="mt36">
+              <Button onClick={handleReset} disabled={loading || !token} variant="primary" size="md" align="center">
+                {loading ? '...' : 'パスワードを更新'}
+              </Button>
+            </div>
+            <hr />
+            <div>
+              <Button to="/login" disabled={loading} variant="black" size="md" align="center">
+                Loginへ戻る
+              </Button>
+            </div>
+          </>
+        )}
+      </div>
     </AppShell>
   );
 }

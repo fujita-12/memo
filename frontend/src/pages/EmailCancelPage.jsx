@@ -55,11 +55,11 @@ export default function EmailCancelPage() {
     }
   };
 
-  // ✅ token無しエラーは「未処理の時だけ」表示
+  //  token無しエラーは「未処理の時だけ」表示
   const showTokenMissing = !token && !info && !error;
 
   return (
-    <AppShell info={info} error={error}>
+    <AppShell info={info} error={error} showTabs={false}>
       <h2>メールアドレス変更の拒否（旧メール）</h2>
 
       {showTokenMissing ? (
@@ -71,12 +71,13 @@ export default function EmailCancelPage() {
             <>
               <p className="small">心当たりがない場合は拒否してください。</p>
 
-              <div className="row mt12">
-                <Button onClick={handleCancel} disabled={loading}>
+              <div className="mt24">
+                <Button onClick={handleCancel} disabled={loading} variant="primary" size="md" align="center">
                   {loading ? '...' : '拒否する'}
                 </Button>
-
-                <Button onClick={() => navigate('/login', { replace: true })} disabled={loading}>
+              </div>
+              <div className="mt24">
+                <Button onClick={() => navigate('/login', { replace: true })} disabled={loading} variant="black" size="md" align="center">
                   Loginへ戻る
                 </Button>
               </div>
@@ -86,7 +87,7 @@ export default function EmailCancelPage() {
           {/* 処理後は、戻るボタンだけ出す（好みで） */}
           {!token && (info || error) && (
             <div className="row mt12">
-              <Button onClick={() => navigate('/login', { replace: true })} disabled={loading}>
+              <Button onClick={() => navigate('/login', { replace: true })} disabled={loading} variant="black" size="md" align="center">
                 Loginへ戻る
               </Button>
             </div>
