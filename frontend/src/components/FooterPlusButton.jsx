@@ -1,6 +1,6 @@
 // src/components/Button.jsx
 import { Link } from 'react-router-dom';
-import styles from './Button.module.css';
+import styles from './FooterPlusButton.module.css';
 
 function cx(...args) {
   return args.filter(Boolean).join(' ');
@@ -11,24 +11,19 @@ export default function Button({
   onClick,
   disabled = false,
   type = 'button',
-
-  // link
   to,
-
-  // style options
-  align = 'center', // 'left' | 'center' | 'right'
-  variant = 'primary', // 'primary' | 'black' | 'danger'
-  size = '', // 'sm' | 'md' | 'lg'
-
   className = '',
+  variant = 'plus', //'plus' | 'back'
+  position = 'right', //'right' | 'left'
 }) {
   const classes = cx(
-    styles.btn,
-    styles[`variant_${variant}`],
-    styles[`size_${size}`],
-    styles[`align_${align}`],
+    styles.bottomBtn,
     disabled && styles.disabled,
-    className // 外から渡されたクラスも混ぜたい場合
+    variant === 'back' && styles.backBtn,
+    position === 'left' && styles.left,
+    position === 'right' && styles.right,
+    disabled && styles.disabled,
+    className
   );
 
   // Link版（toがある時）
