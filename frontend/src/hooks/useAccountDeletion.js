@@ -16,7 +16,7 @@ export function useAccountDeletion({ flash, onDeleted }) {
     try {
       await deleteAccount(deletePw);
 
-      // ✅ 念のためセッションも切る（サーバ側で消えててもOK）
+      //  念のためセッションも切る（サーバ側で消えててもOK）
       await logout().catch(() => {});
 
       onDeleted?.();

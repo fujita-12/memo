@@ -7,7 +7,7 @@ export default function AuthPage({ onUserUpdated }) {
   const nav = useNavigate();
   const [booting, setBooting] = useState(true);
 
-  // ✅ StrictModeで2回走っても1回だけ実行
+  //  StrictModeで2回走っても1回だけ実行
   const ranRef = useRef(false);
 
   useEffect(() => {

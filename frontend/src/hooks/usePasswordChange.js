@@ -20,7 +20,7 @@ export function usePasswordChange({ flash }) {
         password_confirmation: newPasswordConfirmation,
       });
 
-      flash.ok('パスワードを変更しました ✅');
+      flash.ok('パスワードを変更しました ');
       setCurrentPassword('');
       setNewPassword('');
       setNewPasswordConfirmation('');

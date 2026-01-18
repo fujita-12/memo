@@ -20,7 +20,7 @@ class PasswordItemController extends Controller
         // items を取得（latest_entry も一緒に返す）
         $items = $list->items()
             ->with([
-                // latestOfMany の JOIN で「password_item_id が曖昧」になりやすいのでテーブル名付きで select
+                //  latestOfMany の JOIN で「password_item_id が曖昧」になりやすいのでテーブル名付きで select
                 'latestEntry' => function ($q) {
                     $q->select(
                         'password_entries.id',
