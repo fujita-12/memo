@@ -44,7 +44,7 @@ class EmailChangeController extends Controller
         $plainApproveToken = Str::random(64);
         $plainCancelToken  = Str::random(64);
 
-        // ✅ confirmトークンは “まだ作らない”（approve後に作成して新メールへ送る）
+        //  confirmトークンは “まだ作らない”（approve後に作成して新メールへ送る）
         $user->forceFill([
             'pending_email' => $newEmail,
 
@@ -59,7 +59,7 @@ class EmailChangeController extends Controller
             'pending_email_completion_status' => null,
         ])->save();
 
-        // ✅ 旧メールへ：承認/拒否リンクを送る
+        //  旧メールへ：承認/拒否リンクを送る
         Notification::route('mail', $user->email)->notify(
             new EmailChangeRequestedNotification(
                 approveToken: $plainApproveToken,
@@ -115,7 +115,7 @@ class EmailChangeController extends Controller
                 return response()->json(['status' => 'invalid_or_processed']);
             }
 
-            // ✅ approveした瞬間に confirm token を発行して新メールへ送信
+            //  approveした瞬間に confirm token を発行して新メールへ送信
             $plainConfirmToken = Str::random(64);
 
             $user->forceFill([
