@@ -1,5 +1,5 @@
 // src/hooks/useLogoutAction.js
-import { useState, useRef } from 'react'; // ✅ useRef追加
+import { useState, useRef } from 'react'; //  useRef追加
 import { useNavigate } from 'react-router-dom';
 import { logout } from '../api/client';
 import { setFlashInfo } from '../utils/sessionFlash';
@@ -8,10 +8,10 @@ export function useLogoutAction({ flash, onLoggedOut }) {
   const navigate = useNavigate();
   const [loadingLogout, setLoadingLogout] = useState(false);
 
-  const busyRef = useRef(false); // ✅ 追加
+  const busyRef = useRef(false); //  追加
 
   const logoutAction = async () => {
-    if (busyRef.current) return; // ✅ 追加（連打/StrictMode対策）
+    if (busyRef.current) return; //  追加（連打/StrictMode対策）
     busyRef.current = true;
 
     flash?.reset?.();
@@ -30,7 +30,7 @@ export function useLogoutAction({ flash, onLoggedOut }) {
       }
     } finally {
       setLoadingLogout(false);
-      busyRef.current = false; // ✅ 追加
+      busyRef.current = false; //  追加
     }
   };
 

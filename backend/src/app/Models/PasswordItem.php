@@ -25,7 +25,7 @@ class PasswordItem extends Model
         return $this->hasMany(PasswordEntry::class, 'password_item_id');
     }
 
-    // ✅ 一覧の3行プレビューで使う「最新entry」
+    //  一覧の3行プレビューで使う「最新entry」
     public function latestEntry(): HasOne
     {
         return $this->hasOne(PasswordEntry::class, 'password_item_id')->latestOfMany();

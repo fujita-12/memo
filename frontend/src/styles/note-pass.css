@@ -435,7 +435,7 @@
   background: #fff;
   will-change: transform;
   transition: transform 160ms ease;
-  touch-action: pan-y; /* ✅ 基本は縦スクロールOK */
+  touch-action: pan-y; /*  基本は縦スクロールOK */
 }
 
 /* 開いてる時はアニメを気持ち速く */

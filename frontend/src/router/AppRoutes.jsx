@@ -56,7 +56,7 @@ export default function AppRoutes({ user, onUserUpdated, onLoggedOut }) {
       <Route path="/register" element={<RegisterPage onLoggedIn={onUserUpdated} />} />
       <Route path="/forgot" element={<ForgotPage />} />
 
-      {/* ✅ ResetPage がクエリを読む方式に統一 */}
+      {/*  ResetPage がクエリを読む方式に統一 */}
       <Route path="/reset" element={<ResetPage />} />
 
       {/* email links (guest OK) */}
